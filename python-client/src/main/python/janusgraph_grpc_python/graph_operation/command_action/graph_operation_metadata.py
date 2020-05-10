@@ -1,5 +1,5 @@
-from graph_operation.graph_indexer import GraphIndexer
-from graph_operation.graph_adder import GraphElementAdder
+from janusgraph_grpc_python.graph_operation.graph_indexer import GraphIndexer
+from janusgraph_grpc_python.graph_operation.graph_adder import GraphElementAdder
 
 
 class GraphOperationMetadata:
@@ -41,6 +41,23 @@ class GraphOperationMetadata:
 
         print(f"Metadata is after parsing: {self.METADATA}")
 
+        return self
+
+    def set_dict(self, operation, metadata):
+        """
+
+        Args:
+            operation (str):
+            metadata (dict):
+
+        Returns:
+
+        """
+        if len(metadata) != 0:
+            if operation == self.RESERVED_KEYWORD:
+                self.INDEXER = GraphIndexer(**metadata)
+            else:
+                self.ADDER = GraphElementAdder(**metadata)
         return self
 
     def get_metadata(self):

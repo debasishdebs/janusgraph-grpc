@@ -1,6 +1,8 @@
-from management import management_pb2_grpc
-from structure.element.graph_element import GraphElement
-from graph_operation.graph_indexer import GraphIndexer
+from janusgraph_grpc_python.management import management_pb2_grpc
+from janusgraph_grpc_python.structure.element.graph_element import GraphElement
+from janusgraph_grpc_python.graph_operation.graph_indexer import GraphIndexer
+from janusgraph_grpc_python.type_class.graph_element_type import GraphElementType
+from janusgraph_grpc_python.graph_operation.command_action.graph_operation_metadata import GraphOperationMetadata
 
 
 class GraphOperation:
