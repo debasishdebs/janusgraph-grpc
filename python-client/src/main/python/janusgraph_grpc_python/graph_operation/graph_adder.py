@@ -85,8 +85,7 @@ class GraphElementAdder:
 
                 elif property_name == "directed":
                     directed = value if isinstance(value, bool) else (True if value.lower() == "true" else False)
-                    # print(value, directed)
-                    # exit(-1)
+
                     if directed:
                         self.ELEMENT.directed = management_pb2.EdgeLabel.Directed.Value("directed_edge")
                     else:

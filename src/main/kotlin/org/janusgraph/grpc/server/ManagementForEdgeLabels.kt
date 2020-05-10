@@ -56,10 +56,15 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
                     edgeLabelMaker.multiplicity(convertMultiplicityToJavaClass(requestLabel.multiplicity))
 
                 if (requestLabel.directed != null) {
-                    if (convertDirectedToBool(requestLabel.directed))
+                    println("$name is the directed status" + requestLabel.directed)
+                    if (convertDirectedToBool(requestLabel.directed)) {
                         edgeLabelMaker.directed()
-                    else
+                        println("I'm creating directed edge")
+                    }
+                    else {
                         edgeLabelMaker.unidirected()
+                        println("I'm creating undirected edge")
+                    }
                 }
 
                 print("Creating edge label with name " + name + " and multiplicity " + requestLabel.multiplicity.toString() + " and directed " + requestLabel.directed.toString())

@@ -20,6 +20,8 @@ class EdgeLabelMaker(SchemaMaker):
     def __init__(self, label):
         super().__init__()
 
+        self.METADATA = dict()
+
         self.LABEL = label
 
         self.ELEMENT = GraphElementType().set("EdgeLabel")
