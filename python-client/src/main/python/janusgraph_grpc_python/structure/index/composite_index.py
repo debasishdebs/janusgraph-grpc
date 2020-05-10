@@ -1,5 +1,5 @@
-from graph_operation.graph_indexer import GraphIndexer
-from management import management_pb2
+from janusgraph_grpc_python.graph_operation.graph_indexer import GraphIndexer
+from janusgraph_grpc_python.management import management_pb2
 
 
 class CompositeIndex(GraphIndexer):

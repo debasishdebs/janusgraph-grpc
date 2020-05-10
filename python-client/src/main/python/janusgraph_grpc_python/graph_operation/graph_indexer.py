@@ -1,7 +1,7 @@
 from operator import itemgetter
 from collections.abc import Iterable
 
-from management import management_pb2
+from janusgraph_grpc_python.management import management_pb2
 
 
 class GraphIndexer:

@@ -1,5 +1,5 @@
 from .graph_element import GraphElement
-from management import management_pb2
+from janusgraph_grpc_python.management import management_pb2
 
 GRAPH_NAME = "graph_berkleydb"
 

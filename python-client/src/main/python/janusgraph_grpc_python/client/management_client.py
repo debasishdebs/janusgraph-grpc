@@ -2,10 +2,10 @@ import argparse
 from collections.abc import Iterable
 import grpc
 import sys, os
-sys.path.append(os.path.abspath(os.getcwd() + "../../"))
+sys.path.append(os.path.abspath(os.getcwd() + "../../../"))
 print(sys.path[-2:])
 
-from graph_operation.command_action.graph_operation_action import GraphOperationAction
+from janusgraph_grpc_python.graph_operation.command_action.graph_operation_action import GraphOperationAction
 
 
 def switcher(element, data):

@@ -1,6 +1,6 @@
-from structure.element.edge import Edge
-from structure.element.vertex import Vertex
-from structure.element.context_action import Contexts
+from janusgraph_grpc_python.structure.element.edge import Edge
+from janusgraph_grpc_python.structure.element.vertex import Vertex
+from janusgraph_grpc_python.structure.element.context_action import Contexts
 
 
 class GraphElementType:
