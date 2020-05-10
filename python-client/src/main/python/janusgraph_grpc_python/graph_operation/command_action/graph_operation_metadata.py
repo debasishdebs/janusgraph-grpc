@@ -58,6 +58,8 @@ class GraphOperationMetadata:
                 self.INDEXER = GraphIndexer(**metadata)
             else:
                 self.ADDER = GraphElementAdder(**metadata)
+
+            self.METADATA = metadata
         return self
 
     def get_metadata(self):

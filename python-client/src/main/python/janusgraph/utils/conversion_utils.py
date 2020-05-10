@@ -4,6 +4,14 @@ from janusgraph.management.element.vertex_label import VertexLabel
 from janusgraph.management.element.edge_label import EdgeLabel
 
 
+def is_custom_property_present(message, property_name):
+    try:
+        getattr(message, property_name)
+        return True
+    except AttributeError:
+        return False
+
+
 def convert_response_to_python_vertex_label(response):
     vertices = []
 
@@ -12,13 +20,13 @@ def convert_response_to_python_vertex_label(response):
             vertex = VertexLabel(resp.name)
             vertex.set_id(resp.id)
 
-            if "readOnly" in resp:
-                vertex.set_static()
+            if is_custom_property_present(resp, "readOnly"):
+                vertex.set_static(resp.readOnly)
 
-            if "partition" in resp:
-                vertex.set_partitioned()
+            if is_custom_property_present(resp, "partitioned"):
+                vertex.set_partitioned(resp.partitioned)
 
-            if "properties" in resp:
+            if is_custom_property_present(resp, "properties"):
                 vertex.set_properties(resp.properties)
 
             vertices.append(vertex)
@@ -26,13 +34,13 @@ def convert_response_to_python_vertex_label(response):
         vertex = VertexLabel(response.name)
         vertex.set_id(response.id)
 
-        if "readOnly" in response:
-            vertex.set_static()
+        if is_custom_property_present(response, "readOnly"):
+            vertex.set_static(response.readOnly)
 
-        if "partition" in response:
-            vertex.set_partitioned()
+        if is_custom_property_present(response, "partitioned"):
+            vertex.set_partitioned(response.partitioned)
 
-        if "properties" in response:
+        if is_custom_property_present(response, "properties"):
             vertex.set_properties(response.properties)
 
         vertices.append(vertex)
@@ -47,16 +55,16 @@ def convert_response_to_python_edge_label(response):
             edge = EdgeLabel(resp.name)
             edge.set_id(resp.id)
 
-            if "directed" in resp:
+            if is_custom_property_present(resp, "directed"):
                 edge.set_directed(resp.directed)
 
-            if "multiplicity" in resp:
+            if is_custom_property_present(resp, "multiplicity"):
                 edge.set_multiplicity(resp.multiplicity)
 
-            if "properties" in resp:
+            if is_custom_property_present(resp, "properties"):
                 edge.set_properties(resp.properties)
 
-            if "direction" in resp:
+            if is_custom_property_present(resp, "direction"):
                 edge.set_direction(resp.direction)
 
             edges.append(edge)
@@ -64,16 +72,16 @@ def convert_response_to_python_edge_label(response):
         edge = EdgeLabel(response.name)
         edge.set_id(response.id)
 
-        if "directed" in response:
+        if is_custom_property_present(response, "directed"):
             edge.set_directed(response.directed)
 
-        if "multiplicity" in response:
+        if is_custom_property_present(response, "multiplicity"):
             edge.set_multiplicity(response.multiplicity)
 
-        if "properties" in response:
+        if is_custom_property_present(response, "properties"):
             edge.set_properties(response.properties)
 
-        if "direction" in response:
+        if is_custom_property_present(response, "direction"):
             edge.set_direction(response.direction)
 
         edges.append(edge)

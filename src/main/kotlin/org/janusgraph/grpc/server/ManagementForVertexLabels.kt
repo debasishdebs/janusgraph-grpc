@@ -68,6 +68,9 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
     override fun ensureVertexLabel(management: JanusGraphManagement, requestLabel: VertexLabel): VertexLabel? {
         val label = getVertexLabel(management, requestLabel)
         val name = requestLabel.name ?: throw NullPointerException("name should not be null")
+
+        println("Label is $label and requestLabel is $requestLabel")
+
         val vertexLabel = when {
             label?.name() == name -> label
             label != null -> {
@@ -81,9 +84,17 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
                 if (requestLabel.partitioned)
                     vertexLabelMaker.partition()
                 val vertexLabel = vertexLabelMaker.make()
+
+                println(requestLabel)
+                println("Label is $name and static is ${requestLabel.readOnly} and partitioned is ${requestLabel.partitioned}")
+
                 vertexLabel
             }
         }
+
+        println("The result object is $vertexLabel")
+        println("Name: ${vertexLabel.name()} readOnly: ${vertexLabel.isStatic} and partitioned: ${vertexLabel.isPartitioned}")
+
         val properties = requestLabel.propertiesList.map { getOrCreateVertexProperty(management, vertexLabel, it) }
         val response = createVertexLabelProto(vertexLabel, properties)
         management.commit()

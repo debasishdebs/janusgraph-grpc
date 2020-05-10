@@ -35,7 +35,8 @@ class EdgeLabel:
         raise NotImplementedError("Not implemented setting the direction of edge in EdgeLabel")
 
     def set_properties(self, properties):
-        raise NotImplementedError("Not implemented setting properties value from response of gRPC server in EdgeLabel")
+        if len(properties) > 0:
+            raise NotImplementedError("Not implemented setting properties value from response of gRPC server in EdgeLabel")
 
     def get(self):
         self._check_if_valid_edge_label_()

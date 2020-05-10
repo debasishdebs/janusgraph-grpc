@@ -42,6 +42,7 @@ class Vertex(GraphElement):
                 self.REQUEST = management_pb2.GetVertexLabelsByNameRequest(context=self.CONTEXT, name=self.element_label)
         else:
             if self.element_label is not "ALL":
+                print(self.ELEMENT)
                 self.REQUEST = management_pb2.EnsureVertexLabelRequest(context=self.CONTEXT, label=self.ELEMENT)
             else:
                 raise NotImplementedError("Implemented PUT operation on VertexLabel when "
@@ -96,7 +97,8 @@ class Vertex(GraphElement):
 
                 print("Not yet implemented PUT method for GraphAdder instance in VertexLabel. "
                       "--TODO--[Case when Vertex is added without defaults]")
-
+                resp = self.service.EnsureVertexLabel(self.REQUEST)
+                print(resp.name, resp.readOnly, resp.partitioned)
                 return self.service.EnsureVertexLabel(self.REQUEST)
 
             else:

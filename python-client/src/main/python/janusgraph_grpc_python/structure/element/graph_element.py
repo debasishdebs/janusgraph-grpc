@@ -24,8 +24,6 @@ class GraphElement(object):
         if self.service is None:
             raise ValueError("Please call set_service(stub) before calling operate()")
 
-        print("I'm operating on " + self.element + " with operation " + self.operation)
-
         if self.operation == "GET":
             return self.__get__()
         elif self.operation == "PUT":

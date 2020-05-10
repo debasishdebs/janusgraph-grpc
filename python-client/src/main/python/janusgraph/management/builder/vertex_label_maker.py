@@ -9,7 +9,7 @@ class VertexLabelMaker(SchemaMaker):
     LABEL = None
 
     ELEMENT = None
-    METADATA = {}
+    METADATA = None
 
     OPERATION = "PUT"
     CHANNEL = None
@@ -19,6 +19,7 @@ class VertexLabelMaker(SchemaMaker):
         super().__init__()
 
         self.LABEL = label
+        self.METADATA = dict()
 
         self.ELEMENT = GraphElementType().set("VertexLabel")
 

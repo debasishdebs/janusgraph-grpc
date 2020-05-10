@@ -22,6 +22,9 @@ class JanusGraphManagement:
 
         return self
 
+    def close(self):
+        self.CHANNEL.close()
+
     def _create_channel_(self):
         self.CHANNEL = grpc.insecure_channel(f'{self.HOST}:{self.PORT}')
         return self
