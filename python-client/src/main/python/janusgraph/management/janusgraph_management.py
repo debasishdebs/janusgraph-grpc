@@ -1,7 +1,7 @@
 import grpc
 
-from janusgraph.management.builder.vertex_label_maker import VertexLabelMaker
-from janusgraph.management.builder.edge_label_maker import EdgeLabelMaker
+from janusgraph.management.builder.vertex_label_maker import VertexLabelMaker, VertexLabelGetter
+from janusgraph.management.builder.edge_label_maker import EdgeLabelMaker, EdgeLabelGetter
 
 
 class JanusGraphManagement:
@@ -35,6 +35,7 @@ class JanusGraphManagement:
 
         maker = VertexLabelMaker(label)
         maker.set_channel(self.CHANNEL)
+        maker.set_graph(self.GRAPH)
 
         return maker
 
@@ -43,5 +44,42 @@ class JanusGraphManagement:
 
         maker = EdgeLabelMaker(label)
         maker.set_channel(self.CHANNEL)
+        maker.set_graph(self.GRAPH)
 
         return maker
+
+    def getVertexLabel(self, label):
+        self._check_if_connection_is_established_()
+
+        getter = VertexLabelGetter(label)
+        getter.set_channel(self.CHANNEL)
+        getter.set_graph(self.GRAPH)
+
+        return getter.get()
+
+    def getVertexLabels(self):
+        self._check_if_connection_is_established_()
+
+        getter = VertexLabelGetter()
+        getter.set_channel(self.CHANNEL)
+        getter.set_graph(self.GRAPH)
+
+        return getter.get()
+
+    def getEdgeLabel(self, label):
+        self._check_if_connection_is_established_()
+
+        getter = EdgeLabelGetter(label)
+        getter.set_channel(self.CHANNEL)
+        getter.set_graph(self.GRAPH)
+
+        return getter.get()
+
+    def getEdgeLabels(self):
+        self._check_if_connection_is_established_()
+
+        getter = EdgeLabelGetter()
+        getter.set_channel(self.CHANNEL)
+        getter.set_graph(self.GRAPH)
+
+        return getter.get()

@@ -22,6 +22,7 @@ class GraphOperation:
         self.OPERATION = None
         self.CHANNEL = None
         self.SERVICE = None
+        self.GRAPH_NAME = None
 
         self.processor = GraphElement
 
@@ -37,6 +38,10 @@ class GraphOperation:
     def set_channel(self, channel):
         self.CHANNEL = channel
 
+    def set_graph_name(self, graph_name):
+        self.GRAPH_NAME = graph_name
+        return self
+
     def get_processor(self):
         """This method gets the processor. A Processor is a Class which
         specifies weather its processing Vertex, Edge, Context etc
@@ -51,8 +56,12 @@ class GraphOperation:
             raise ValueError("Call set_channel to set the CHANNEL type before calling get_processor() method")
         if not isinstance(self.element_name, str):
             raise ValueError("String dataType expected for metadata either ALL or name of element")
+        if self.GRAPH_NAME is None:
+            raise ValueError("Call set_graph_name() before generating processor")
 
         self.processor = self.graph_element(self.OPERATION, self.element_name, self.metadata.get_metadata())
+        self.processor.set_graph_name(self.GRAPH_NAME)
+
         self.__generate_service__()
         self.processor.set_service(self.SERVICE)
 

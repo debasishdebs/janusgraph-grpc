@@ -13,6 +13,7 @@ class EdgeLabelMaker(SchemaMaker):
 
     OPERATION = "PUT"
     CHANNEL = None
+    GRAPH = None
 
     multiplicity_values = ["Simple", "Many2One", "Multi", "One2Many", "One2One"]
 
@@ -26,12 +27,18 @@ class EdgeLabelMaker(SchemaMaker):
     def set_channel(self, channel):
         self.CHANNEL = channel
 
+    def set_graph(self, graph):
+        self.GRAPH = graph
+
     def _check_if_valid_params_passed_(self):
         if self.LABEL is None:
             raise ValueError(f"LABEL needs to be provided as min param for create VertexLabel. Got {self.LABEL}")
 
         if self.CHANNEL is None:
             raise ValueError(f"set_channel() from JanusGraphManagement needs to be invoked before doing any operations")
+
+        if self.GRAPH is None:
+            raise ValueError("Call set_graph() before calling any operations")
         return self
 
     def multiplicity(self, mult):
@@ -60,6 +67,59 @@ class EdgeLabelMaker(SchemaMaker):
 
         operation.set_operation(self.OPERATION)
         operation.set_channel(self.CHANNEL)
+        operation.set_graph_name(self.GRAPH)
+
+        processor = operation.get_processor()
+
+        return convert_response_to_python_edge_label(processor.operate())
+
+
+class EdgeLabelGetter(SchemaMaker):
+    LABEL = None
+    ELEMENT = None
+
+    OPERATION = "GET"
+    CHANNEL = None
+    GRAPH = None
+
+    def __init__(self, label=None):
+        super().__init__()
+        self.LABEL = label
+
+        self.ELEMENT = GraphElementType().set("EdgeLabel")
+
+    def set_channel(self, channel):
+        self.CHANNEL = channel
+
+    def set_graph(self, graph):
+        self.GRAPH = graph
+
+    def _prepare_query_(self):
+        metadata = GraphOperationMetadata().set_dict("ADDER", {})
+
+        if self.LABEL is not None:
+            operation = self.make_operation(self.ELEMENT, self.LABEL, metadata)
+        else:
+            operation = self.make_operation(self.ELEMENT, "ALL", metadata)
+
+        operation.set_operation(self.OPERATION)
+        operation.set_channel(self.CHANNEL)
+        operation.set_graph_name(self.GRAPH)
+        return operation
+
+    def _check_if_valid_params_passed_(self):
+
+        if self.CHANNEL is None:
+            raise ValueError(f"set_channel() from JanusGraphManagement needs to be invoked before doing any operations")
+
+        if self.GRAPH is None:
+            raise ValueError("Call set_graph() before calling any operations")
+        return self
+
+    def get(self):
+        self._check_if_valid_params_passed_()
+
+        operation = self._prepare_query_()
 
         processor = operation.get_processor()
 

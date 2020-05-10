@@ -3,8 +3,6 @@ from janusgraph_grpc_python.management import management_pb2
 from janusgraph_grpc_python.graph_operation.graph_indexer import GraphIndexer
 from janusgraph_grpc_python.graph_operation.graph_adder import GraphElementAdder
 
-GRAPH_NAME = "graph_berkleydb"
-
 
 class Edge(GraphElement):
     def __init__(self, operation, label, optional_metadata=None):
@@ -29,7 +27,10 @@ class Edge(GraphElement):
         self.OPTIONAL_OPERATOR = addtnl_operator
 
     def __generate_context__(self):
-        self.CONTEXT = management_pb2.JanusGraphContext(graphName=GRAPH_NAME)
+        if self.GRAPH_NAME is not None:
+            self.CONTEXT = management_pb2.JanusGraphContext(graphName=self.GRAPH_NAME)
+        else:
+            raise ValueError("Please call set_graph_name on graph_element() before generating context")
         return self
 
     def __generate_request__(self):

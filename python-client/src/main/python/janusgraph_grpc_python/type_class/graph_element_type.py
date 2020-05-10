@@ -23,7 +23,7 @@ class GraphElementType:
                 raise KeyError(f"Command type initialized as something but not {name}")
 
     def get(self):
-        """ Returns the object which isn't null
+        """Returns the object which isn't null
 
         Returns:
             GraphElement

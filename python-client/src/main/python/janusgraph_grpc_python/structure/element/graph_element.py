@@ -1,4 +1,6 @@
 class GraphElement(object):
+    GRAPH_NAME = None
+
     def __init__(self, element, operation, metadata, optional_metadata):
         self.element = element
         self.operation = operation
@@ -6,7 +8,10 @@ class GraphElement(object):
         self.service = None
 
         self.OPTIONAL_METADATA = optional_metadata
-        pass
+
+    def set_graph_name(self, graph_name):
+        self.GRAPH_NAME = graph_name
+        return self
 
     def get_element(self):
         raise NotImplementedError("Not implemented GraphElement without being subclassed and get_element() being called")

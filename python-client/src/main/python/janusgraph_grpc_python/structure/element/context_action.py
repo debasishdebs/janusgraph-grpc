@@ -1,8 +1,6 @@
 from .graph_element import GraphElement
 from janusgraph_grpc_python.management import management_pb2
 
-GRAPH_NAME = "graph_berkleydb"
-
 
 class Contexts(GraphElement):
     def __init__(self, operation, label, optional_metadata=None):
@@ -11,14 +9,15 @@ class Contexts(GraphElement):
         self.operation = operation
         self.element_label = label
 
-        self.context_name = GRAPH_NAME
-
         self.CONTEXT = None
         self.REQUEST = None
         self.ELEMENT = self.get_element()
 
     def __generate_context__(self):
-        self.CONTEXT = management_pb2.JanusGraphContext(graphName=self.context_name) if self.ELEMENT is None else self.ELEMENT
+        if self.GRAPH_NAME is not None:
+            self.CONTEXT = management_pb2.JanusGraphContext(graphName=self.GRAPH_NAME)
+        else:
+            raise ValueError("Please call set_graph_name on graph_element() before generating context")
         return self
 
     def __generate_request__(self):
@@ -32,7 +31,7 @@ class Contexts(GraphElement):
         return self
 
     def get_element(self):
-        return management_pb2.JanusGraphContext(graphName=self.context_name) if self.CONTEXT is None else self.CONTEXT
+        return management_pb2.JanusGraphContext(graphName=self.GRAPH_NAME) if self.CONTEXT is None else self.CONTEXT
 
     def __get__(self):
         self.__generate_context__()
