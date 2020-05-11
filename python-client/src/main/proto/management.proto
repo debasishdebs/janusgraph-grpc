@@ -48,6 +48,18 @@ message VertexProperty {
     Cardinality cardinality = 4;
 }
 
+message PropertyKey {
+    google.protobuf.Int64Value id = 1;
+    string name = 2;
+    PropertyDataType dataType = 3;
+    enum Cardinality {
+        Single = 0;
+        List = 1;
+        Set = 2;
+    }
+    Cardinality cardinality = 4;
+}
+
 message VertexLabel {
     google.protobuf.Int64Value id = 1;
     string name = 2;
@@ -111,6 +123,41 @@ message EnsureEdgeLabelRequest {
 }
 
 message GetEdgeLabelsRequest {
+    JanusGraphContext context = 1;
+}
+
+message EnsurePropertyKeyRequest {
+    JanusGraphContext context = 1;
+    PropertyKey property = 2;
+}
+
+message EnsurePropertyKeyForVertexLabelRequest {
+    JanusGraphContext context = 1;
+    PropertyKey property = 2;
+    VertexLabel label = 3;
+}
+
+message EnsurePropertyKeyForEdgeLabelRequest {
+    JanusGraphContext context = 1;
+    PropertyKey property = 2;
+    EdgeLabel label = 3;
+}
+
+message EnsurePropertyKeyForLabelRequest {
+    JanusGraphContext context = 1;
+    PropertyKey property = 2;
+    string label = 3;
+}
+
+message GetVertexPropertyKeysRequest {
+    JanusGraphContext context = 1;
+}
+
+message GetEdgePropertyKeysRequest {
+    JanusGraphContext context = 1;
+}
+
+message GetPropertyKeysRequest {
     JanusGraphContext context = 1;
 }
 
@@ -207,6 +254,17 @@ message EnsureMixedIndexByEdgeLabelRequest {
 service AccessContext {
     rpc GetContexts (GetContextsRequest) returns (stream JanusGraphContext);
     rpc GetContextByGraphName (GetContextByGraphNameRequest) returns (JanusGraphContext);
+}
+
+service ManagementForPropertyKeys {
+    rpc GetPropertyKeysForVertex (GetVertexPropertyKeysRequest) returns (stream VertexProperty);
+    rpc GetPropertyKeysForEdge (GetEdgePropertyKeysRequest) returns (stream EdgeProperty);
+    rpc GetPropertyKeys (GetPropertyKeysRequest) returns (stream PropertyKey);
+
+    rpc EnsurePropertyKeyForLabel (EnsurePropertyKeyForLabelRequest) returns (PropertyKey);
+    rpc EnsurePropertyKeyFor (EnsurePropertyKeyRequest) returns (PropertyKey);
+    rpc EnsurePropertyKeyForVertexLabel (EnsurePropertyKeyForVertexLabelRequest) returns (VertexProperty);
+    rpc EnsurePropertyKeyForEdgeLabel (EnsurePropertyKeyForEdgeLabelRequest) returns (EdgeProperty);
 }
 
 service ManagementForEdgeLabels {

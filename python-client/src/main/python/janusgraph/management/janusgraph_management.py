@@ -2,6 +2,7 @@ import grpc
 
 from janusgraph.management.builder.vertex_label_maker import VertexLabelMaker, VertexLabelGetter
 from janusgraph.management.builder.edge_label_maker import EdgeLabelMaker, EdgeLabelGetter
+from janusgraph.management.builder.composite_index_maker import CompositeIndexMaker
 
 
 class JanusGraphManagement:
@@ -86,3 +87,9 @@ class JanusGraphManagement:
         getter.set_graph(self.GRAPH)
 
         return getter.get()
+
+    def buildCompositeIndex(self, name):
+        self._check_if_connection_is_established_()
+
+        maker = CompositeIndexMaker(name)
+        return

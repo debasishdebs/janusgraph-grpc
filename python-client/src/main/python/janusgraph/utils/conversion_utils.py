@@ -12,6 +12,10 @@ def is_custom_property_present(message, property_name):
         return False
 
 
+def convert_response_to_python_property_key(response):
+    return None
+
+
 def convert_response_to_python_vertex_label(response):
     vertices = []
 
