@@ -115,6 +115,7 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
             .setName(graphIndex.name())
             .addAllProperties(properties)
             .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
+            .setLabel(requestLabel.name)
             .build()
         management.commit()
         return compositeIndex
@@ -146,6 +147,7 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
                     .setName(it.name)
                     .addAllProperties(it.fieldKeys.map { property -> createEdgePropertyProto(property.fieldKey) })
                     .setStatus(convertSchemaStatusToString(it.status))
+                    .setLabel(it.schemaTypeConstraint.toString())
                     .build()
             }
         tx.rollback()
@@ -162,11 +164,16 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
             .filterIsInstance<CompositeIndexType>()
             .filter { it.name == indexName }
             .map {
+                val label = if (it.schemaTypeConstraint == null)
+                    "ALL"
+                else
+                    it.schemaTypeConstraint.toString()
+
                 CompositeEdgeIndex.newBuilder()
                     .setName(it.name)
                     .addAllProperties(it.fieldKeys.map { property -> createEdgePropertyProto(property.fieldKey) })
                     .setStatus(convertSchemaStatusToString(it.status))
-                    .setLabel(it.schemaTypeConstraint.toString())
+                    .setLabel(label)
                     .build()
             }
         tx.rollback()
@@ -181,32 +188,43 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
         val indices = graphIndexes
             .filterIsInstance<CompositeIndexType>()
             .map {
+                val label = if (it.schemaTypeConstraint == null)
+                    "ALL"
+                else
+                    it.schemaTypeConstraint.toString()
+
                 CompositeEdgeIndex.newBuilder()
                     .setName(it.name)
                     .addAllProperties(it.fieldKeys.map { property -> createEdgePropertyProto(property.fieldKey) })
                     .setStatus(convertSchemaStatusToString(it.status))
+                    .setLabel(label)
                     .build()
             }
         tx.rollback()
         return indices
     }
 
-    override fun enableCompositeIndexByName(graph: StandardJanusGraph, indexName: String): CompositeEdgeIndex {
+    override fun enableEdgeCompositeIndex(graph: StandardJanusGraph, index: CompositeEdgeIndex): CompositeEdgeIndex {
+
+        val indexName = index.name
+        val labelConstraint = index.label
+
         ManagementSystem.awaitGraphIndexStatus(graph, indexName).call()
 
         val management = graph.openManagement()
-        val index = management.getGraphIndex(indexName)
-        if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.REGISTERED) {
-            management.updateIndex(index, SchemaAction.ENABLE_INDEX)
-        } else if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.INSTALLED)
+        val idx = management.getGraphIndex(indexName)
+        if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.REGISTERED) {
+            management.updateIndex(idx, SchemaAction.ENABLE_INDEX)
+        } else if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.INSTALLED)
             throw IllegalAccessError("Exception in converting Index from INSTALLED to REGISTERED/ENABLED")
-        else if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.DISABLED)
+        else if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.DISABLED)
             throw IllegalAccessException("Index can't be created on Index with status DISABLED")
 
         val compositeIndex = CompositeEdgeIndex.newBuilder()
-            .setName(index.name())
-            .addAllProperties(index.fieldKeys.map { createEdgePropertyProto(it) })
-            .setStatus(convertSchemaStatusToString(index.getIndexStatus(index.fieldKeys[0])))
+            .setName(idx.name())
+            .addAllProperties(idx.fieldKeys.map { createEdgePropertyProto(it) })
+            .setStatus(convertSchemaStatusToString(idx.getIndexStatus(idx.fieldKeys[0])))
+            .setLabel(labelConstraint)
             .build()
         management.commit()
 

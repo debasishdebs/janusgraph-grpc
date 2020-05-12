@@ -436,6 +436,7 @@ class ManagementForVertexLabelsTests {
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
         assertFalse(compositeIndex.unique)
+        assertEquals(label.name, compositeIndex.label)
     }
 
     @Test
@@ -454,9 +455,11 @@ class ManagementForVertexLabelsTests {
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
+        assertEquals(label.name, compositeIndex.label)
 
-        val compositeEdgeIndex = managementServer.enableCompositeIndexByName(graph, compositeIndex.name)
-        assertEquals("ENABLED", compositeEdgeIndex.status)
+        val compositeVertexIndex = managementServer.enableVertexCompositeIndex(graph, compositeIndex)
+        assertEquals("ENABLED", compositeVertexIndex.status)
+        assertEquals(label.name, compositeVertexIndex.label)
     }
 
     @Test
@@ -504,6 +507,7 @@ class ManagementForVertexLabelsTests {
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
         assertFalse(compositeIndex.unique)
+        assertEquals("ALL", compositeIndex.label)
     }
 
     @Test
@@ -523,8 +527,9 @@ class ManagementForVertexLabelsTests {
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
 
-        val compositeEdgeIndex = managementServer.enableCompositeIndexByName(graph, compositeIndex.name)
-        assertEquals("ENABLED", compositeEdgeIndex.status)
+        val compositeVertexIndex = managementServer.enableVertexCompositeIndex(graph, compositeIndex)
+        assertEquals("ENABLED", compositeVertexIndex.status)
+        assertEquals("ALL", compositeVertexIndex.label)
     }
 
     @Test
@@ -584,6 +589,7 @@ class ManagementForVertexLabelsTests {
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertFalse(compositeIndex.unique)
         assertEquals("INSTALLED", compositeIndex.status)
+        assertEquals(label.name, compositeIndex.label)
     }
 
     @Test
@@ -619,7 +625,7 @@ class ManagementForVertexLabelsTests {
     }
 
     @Test
-    fun `getCompositeIndexForVertex basic index`() {
+    fun `getCompositeIndexForVertexByName basic index`() {
         val (managementServer, graph) = createDefaults()
         val property = buildProperty(dataType = PropertyDataType.String)
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
@@ -635,10 +641,11 @@ class ManagementForVertexLabelsTests {
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertFalse(compositeIndex.unique)
         assertEquals("INSTALLED", compositeIndex.status)
+        assertEquals("ALL", compositeIndex.label)
     }
 
     @Test
-    fun `getCompositeIndexForVertex create unique index`() {
+    fun `getCompositeIndexForVertexByName create unique index`() {
         val (managementServer, graph) = createDefaults()
         val property = buildProperty(dataType = PropertyDataType.String)
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
@@ -652,7 +659,7 @@ class ManagementForVertexLabelsTests {
     }
 
     @Test
-    fun `getCompositeIndexForVertex create index with two properties`() {
+    fun `getCompositeIndexForVertexByName create index with two properties`() {
         val (managementServer, graph) = createDefaults()
         val property1 = buildProperty("property1", dataType = PropertyDataType.String)
         val property2 = buildProperty("property2", dataType = PropertyDataType.String)

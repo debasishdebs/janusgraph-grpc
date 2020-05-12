@@ -14,7 +14,7 @@ interface IManagementForVertexLabels {
 
     fun ensureCompositeIndexByVertexLabel(management: JanusGraphManagement, requestLabel: VertexLabel, requestIndex: CompositeVertexIndex): CompositeVertexIndex?
     fun getCompositeIndicesByVertexLabel(graph: StandardJanusGraph, requestLabel: VertexLabel): List<CompositeVertexIndex>
-    fun enableCompositeIndexByName(graph: StandardJanusGraph, indexName: String): CompositeVertexIndex
+    fun enableVertexCompositeIndex(graph: StandardJanusGraph, index: CompositeVertexIndex): CompositeVertexIndex
 
     fun getVertexCompositeIndexByName(graph: StandardJanusGraph, indexName: String): CompositeVertexIndex
 

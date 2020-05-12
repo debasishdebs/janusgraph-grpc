@@ -253,9 +253,14 @@ message EnsureCompositeIndexForEdgesRequest {
     CompositeEdgeIndex index = 2;
 }
 
-message EnableCompositeIndexByNameRequest {
+message EnableVertexCompositeIndexByNameRequest {
     JanusGraphContext context = 1;
-    string name = 2;
+    CompositeVertexIndex index = 2;
+}
+
+message EnableEdgeCompositeIndexByNameRequest {
+    JanusGraphContext context = 1;
+    CompositeEdgeIndex index = 2;
 }
 
 message MixedEdgeIndex {
@@ -303,7 +308,7 @@ service ManagementForEdgeLabels {
     rpc GetCompositeIndicesForEdge (GetCompositeIndicesForEdgeRequest) returns (stream CompositeEdgeIndex);
     rpc EnsureCompositeIndexForEdge (EnsureCompositeIndexForEdgesRequest) returns (CompositeEdgeIndex);
 
-    rpc EnableCompositeIndexByName (EnableCompositeIndexByNameRequest) returns (CompositeEdgeIndex);
+    rpc EnableEdgeCompositeIndex (EnableEdgeCompositeIndexByNameRequest) returns (CompositeEdgeIndex);
 
     rpc GetMixedIndicesByEdgeLabel (GetMixedIndicesByEdgeLabelRequest) returns (stream MixedEdgeIndex);
     rpc EnsureMixedIndexByEdgeLabel (EnsureMixedIndexByEdgeLabelRequest) returns (MixedEdgeIndex);
@@ -320,7 +325,7 @@ service ManagementForVertexLabels{
 
     rpc GetCompositeIndicesForVertex (GetCompositeIndicesForVertexRequest) returns (stream CompositeVertexIndex);
     rpc EnsureCompositeIndexForVertex (EnsureCompositeIndexForVerticesRequest) returns (CompositeVertexIndex);
-    rpc EnableCompositeIndexByName (EnableCompositeIndexByNameRequest) returns (CompositeVertexIndex);
+    rpc EnableVertexCompositeIndex (EnableVertexCompositeIndexByNameRequest) returns (CompositeVertexIndex);
 
     rpc GetMixedIndicesByVertexLabel (GetMixedIndicesByVertexLabelRequest) returns (stream MixedVertexIndex);
     rpc EnsureMixedIndexByVertexLabel (EnsureMixedIndexByVertexLabelRequest) returns (MixedVertexIndex);

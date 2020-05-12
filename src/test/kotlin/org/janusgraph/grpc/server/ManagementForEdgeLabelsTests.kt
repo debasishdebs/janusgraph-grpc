@@ -333,6 +333,7 @@ class ManagementForEdgeLabelsTests {
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
+        assertEquals(label.name, compositeIndex.label)
     }
 
     @Test
@@ -351,9 +352,11 @@ class ManagementForEdgeLabelsTests {
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
+        assertEquals(label.name, compositeIndex.label)
 
-        val compositeEdgeIndex = managementServer.enableCompositeIndexByName(graph, compositeIndex.name)
+        val compositeEdgeIndex = managementServer.enableEdgeCompositeIndex(graph, compositeIndex)
         assertEquals("ENABLED", compositeEdgeIndex.status)
+        assertEquals(label.name, compositeEdgeIndex.label)
     }
 
     @Test
@@ -400,7 +403,7 @@ class ManagementForEdgeLabelsTests {
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
-
+        assertEquals(label.name, compositeIndex.label)
     }
 
     @Test
@@ -437,7 +440,7 @@ class ManagementForEdgeLabelsTests {
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
-
+        assertEquals("ALL", compositeIndex.label)
     }
 
     @Test
@@ -456,6 +459,7 @@ class ManagementForEdgeLabelsTests {
         assertEquals(2, compositeIndex.propertiesCount)
         assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
         assertTrue(compositeIndex.propertiesList.any { it.name == property2.name })
+        assertEquals("ALL", compositeIndex.label)
     }
 
     private fun buildMixedIndex(

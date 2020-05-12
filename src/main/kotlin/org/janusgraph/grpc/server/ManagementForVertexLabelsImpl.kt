@@ -53,8 +53,8 @@ class ManagementForVertexLabelsImpl(
         responseObserver?.onCompleted()
     }
 
-    override fun enableCompositeIndexByName(
-        request: EnableCompositeIndexByNameRequest,
+    override fun enableVertexCompositeIndex(
+        request: EnableVertexCompositeIndexByNameRequest,
         responseObserver: StreamObserver<CompositeVertexIndex>
     ) {
         val graph = contextManager.getGraph(request.context)
@@ -63,7 +63,7 @@ class ManagementForVertexLabelsImpl(
             return
         }
 
-        val index = managementServer.enableCompositeIndexByName(graph, request.name)
+        val index = managementServer.enableVertexCompositeIndex(graph, request.index)
         responseObserver.onNext(index)
         responseObserver.onCompleted()
     }

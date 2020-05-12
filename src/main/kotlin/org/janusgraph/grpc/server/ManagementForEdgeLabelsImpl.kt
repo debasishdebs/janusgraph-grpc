@@ -75,8 +75,8 @@ class ManagementForEdgeLabelsImpl(
         responseObserver?.onCompleted()
     }
 
-    override fun enableCompositeIndexByName(
-        request: EnableCompositeIndexByNameRequest,
+    override fun enableEdgeCompositeIndex(
+        request: EnableEdgeCompositeIndexByNameRequest,
         responseObserver: StreamObserver<CompositeEdgeIndex>
     ) {
         val graph = contextManager.getGraph(request.context)
@@ -85,7 +85,7 @@ class ManagementForEdgeLabelsImpl(
             return
         }
 
-        val index = managementServer.enableCompositeIndexByName(graph, request.name)
+        val index = managementServer.enableEdgeCompositeIndex(graph, request.index)
         responseObserver.onNext(index)
         responseObserver.onCompleted()
     }

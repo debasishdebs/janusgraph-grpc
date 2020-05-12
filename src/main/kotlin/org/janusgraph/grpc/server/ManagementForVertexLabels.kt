@@ -175,12 +175,10 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             .filterIsInstance<CompositeIndexType>()
             .filter { it.name == indexName }
             .map {
-
-                val label: String
-                if (it.schemaTypeConstraint == null)
-                    label = "ALL"
+                val label = if (it.schemaTypeConstraint == null)
+                    "ALL"
                 else
-                    label = it.schemaTypeConstraint.toString()
+                    it.schemaTypeConstraint.toString()
 
                 println(it.schemaTypeConstraint)
                 CompositeVertexIndex.newBuilder()
@@ -203,12 +201,10 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         val indices = graphIndexes
             .filterIsInstance<CompositeIndexType>()
             .map {
-
-                val label: String
-                if (it.schemaTypeConstraint == null)
-                    label = "ALL"
+                val label = if (it.schemaTypeConstraint == null)
+                    "ALL"
                 else
-                    label = it.schemaTypeConstraint.toString()
+                    it.schemaTypeConstraint.toString()
 
                 CompositeVertexIndex.newBuilder()
                     .setName(it.name)
@@ -222,23 +218,27 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         return indices
     }
 
-    override fun enableCompositeIndexByName(graph: StandardJanusGraph, indexName: String): CompositeVertexIndex {
+    override fun enableVertexCompositeIndex(graph: StandardJanusGraph, index: CompositeVertexIndex): CompositeVertexIndex {
+
+        val indexName = index.name
+        val labelConstraint = index.label
+
         ManagementSystem.awaitGraphIndexStatus(graph, indexName).call()
 
         val management = graph.openManagement()
-        val index = management.getGraphIndex(indexName)
-        if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.REGISTERED) {
-            management.updateIndex(index, SchemaAction.ENABLE_INDEX)
-            println("Changed from REGISTERED to ENABLED")
-        } else if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.INSTALLED)
+        val idx = management.getGraphIndex(indexName)
+        if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.REGISTERED)
+            management.updateIndex(idx, SchemaAction.ENABLE_INDEX)
+        else if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.INSTALLED)
             throw IllegalAccessError("Exception in converting Index from INSTALLED to REGISTERED/ENABLED")
-        else if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.DISABLED)
+        else if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.DISABLED)
             throw IllegalAccessException("Index can't be created on Index with status DISABLED")
 
         val compositeIndex = CompositeVertexIndex.newBuilder()
-            .setName(index.name())
-            .addAllProperties(index.fieldKeys.map { createVertexPropertyKeysProto(it) })
-            .setStatus(convertSchemaStatusToString(index.getIndexStatus(index.fieldKeys[0])))
+            .setName(idx.name())
+            .addAllProperties(idx.fieldKeys.map { createVertexPropertyKeysProto(it) })
+            .setStatus(convertSchemaStatusToString(idx.getIndexStatus(idx.fieldKeys[0])))
+            .setLabel(labelConstraint)
             .build()
         management.commit()
 
