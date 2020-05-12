@@ -290,10 +290,7 @@ service ManagementForPropertyKeys {
     rpc GetPropertyKeys (GetPropertyKeysRequest) returns (stream PropertyKey);
     rpc GetPropertyKeyByName (GetPropertyKeyByNameRequest) returns (PropertyKey);
 
-    rpc EnsurePropertyKeyForLabel (EnsurePropertyKeyForLabelRequest) returns (PropertyKey);
     rpc EnsurePropertyKey (EnsurePropertyKeyRequest) returns (PropertyKey);
-    rpc EnsurePropertyKeyForVertexLabel (EnsurePropertyKeyForVertexLabelRequest) returns (VertexProperty);
-    rpc EnsurePropertyKeyForEdgeLabel (EnsurePropertyKeyForEdgeLabelRequest) returns (EdgeProperty);
 }
 
 service ManagementForEdgeLabels {

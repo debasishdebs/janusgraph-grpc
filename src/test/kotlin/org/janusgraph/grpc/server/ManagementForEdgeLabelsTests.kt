@@ -425,7 +425,7 @@ class ManagementForEdgeLabelsTests {
     }
 
     @Test
-    fun `getCompositeIndicesForEdge basic index`() {
+    fun `getCompositeIndicesForEdgeByName basic index`() {
         val (managementServer, graph) = createDefaults()
         val property = buildProperty(dataType = PropertyDataType.String)
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
@@ -444,22 +444,69 @@ class ManagementForEdgeLabelsTests {
     }
 
     @Test
+    fun `getCompositeIndicesForEdgeByName create index with two properties`() {
+        val (managementServer, graph) = createDefaults()
+        val property1 = buildProperty("property1", dataType = PropertyDataType.String)
+        val property2 = buildProperty("property2", dataType = PropertyDataType.String)
+        val property3 = buildProperty("property3", dataType = PropertyDataType.String)
+
+        buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
+
+        val index = buildCompositeIndex("test", properties = listOf(property1, property2, property3))
+        managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)!!
+
+        val compositeIndex = managementServer.getEdgeCompositeIndexByName(graph, "test")
+
+        assertEquals(3, compositeIndex.propertiesCount)
+        assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
+        assertTrue(compositeIndex.propertiesList.any { it.name == property2.name })
+        assertTrue(compositeIndex.propertiesList.any { it.name == property3.name })
+        assertEquals("ALL", compositeIndex.label)
+    }
+
+    @Test
+    fun `getCompositeIndicesForEdge basic index`() {
+        val (managementServer, graph) = createDefaults()
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
+        managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)
+
+        val compositeIndices = managementServer.getCompositeIndicesForEdge(graph)
+
+        compositeIndices.forEach { compositeIndex ->
+            assertNotNull(compositeIndex.id)
+            assertEquals("test", compositeIndex.name)
+            assertEquals(1, compositeIndex.propertiesCount)
+            assertNotNull(compositeIndex.propertiesList.first().id)
+            assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+            assertEquals("INSTALLED", compositeIndex.status)
+            assertEquals("ALL", compositeIndex.label)
+        }
+
+    }
+
+    @Test
     fun `getCompositeIndicesForEdge create index with two properties`() {
         val (managementServer, graph) = createDefaults()
         val property1 = buildProperty("property1", dataType = PropertyDataType.String)
         val property2 = buildProperty("property2", dataType = PropertyDataType.String)
         val property3 = buildProperty("property3", dataType = PropertyDataType.String)
-        val label =
-            buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
-        val index = buildCompositeIndex("test", properties = listOf(property1, property2))
+
+        buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
+
+        val index = buildCompositeIndex("test", properties = listOf(property1, property2, property3))
+        println(index)
         managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)!!
 
-        val compositeIndex = managementServer.getEdgeCompositeIndexByName(graph, "test")
+        val compositeIndices = managementServer.getCompositeIndicesForEdge(graph)
 
-        assertEquals(2, compositeIndex.propertiesCount)
-        assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
-        assertTrue(compositeIndex.propertiesList.any { it.name == property2.name })
-        assertEquals("ALL", compositeIndex.label)
+        compositeIndices.forEach { compositeIndex ->
+            assertEquals(3, compositeIndex.propertiesCount)
+            assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
+            assertTrue(compositeIndex.propertiesList.any { it.name == property2.name })
+            assertEquals("ALL", compositeIndex.label)
+        }
     }
 
     private fun buildMixedIndex(

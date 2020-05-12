@@ -21,27 +21,9 @@ class ManagementForPropertyKeysImpl (
 
     }
 
-    override fun ensurePropertyKeyForLabel(
-        request: EnsurePropertyKeyForLabelRequest?,
-        responseObserver: StreamObserver<PropertyKey>?) {
-
-    }
-
     override fun ensurePropertyKey(
         request: EnsurePropertyKeyRequest?,
         responseObserver: StreamObserver<PropertyKey>?) {
-
-    }
-
-    override fun ensurePropertyKeyForVertexLabel(
-        request: EnsurePropertyKeyForVertexLabelRequest?,
-        responseObserver: StreamObserver<VertexProperty>?) {
-
-    }
-
-    override fun ensurePropertyKeyForEdgeLabel(
-        request: EnsurePropertyKeyForEdgeLabelRequest?,
-        responseObserver: StreamObserver<EdgeProperty>?) {
 
     }
 }

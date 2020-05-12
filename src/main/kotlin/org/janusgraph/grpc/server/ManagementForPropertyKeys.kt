@@ -2,6 +2,8 @@ package org.janusgraph.grpc.server
 
 import org.janusgraph.core.schema.JanusGraphManagement
 import org.janusgraph.grpc.*
+import java.lang.IllegalArgumentException
+import java.lang.NullPointerException
 
 class ManagementForPropertyKeys: IManagementForPropertyKeys {
 
@@ -35,6 +37,8 @@ class ManagementForPropertyKeys: IManagementForPropertyKeys {
         }
 
         management.commit()
+        println("====")
+        println(elementLabel.mappedProperties())
         return response
     }
 
@@ -46,6 +50,7 @@ class ManagementForPropertyKeys: IManagementForPropertyKeys {
             management.getPropertyKey(property.name) ?: management
                 .makePropertyKey(property.name)
                 .dataType(convertDataTypeToJavaClass(property.dataType))
+                .cardinality(convertCardinalityToJavaClass(property.cardinality))
                 .make()
 
         return propertyKey
@@ -60,10 +65,15 @@ class ManagementForPropertyKeys: IManagementForPropertyKeys {
             management.getPropertyKey(property.name) ?: management
                 .makePropertyKey(property.name)
                 .dataType(convertDataTypeToJavaClass(property.dataType))
+                .cardinality(convertCardinalityToJavaClass(property.cardinality))
                 .make()
 
         val connections = label.mappedProperties()
+        println(propertyKey.name())
+        println(connections)
+        println(connections.contains(propertyKey))
         if (!connections.contains(propertyKey)) {
+            println("So I'm adding maps")
             management.addProperties(label, propertyKey)
         }
         return propertyKey
@@ -101,7 +111,8 @@ class ManagementForPropertyKeys: IManagementForPropertyKeys {
         label: VertexLabel
     ): VertexProperty {
 
-        val elementLabel = management.getVertexLabel(label.name)
+        val elementLabel = management.getVertexLabel(label.name) ?: throw NullPointerException("VertexLabel doesn't exist")
+
         val property = getOrCreateVertexProperty(management, elementLabel, convertVertexPropertyToPropertyKey(requestPropertyKey))
         val response = createVertexPropertyKeysProto(property)
         management.commit()
@@ -114,7 +125,8 @@ class ManagementForPropertyKeys: IManagementForPropertyKeys {
         label: EdgeLabel
     ): EdgeProperty {
 
-        val elementLabel = management.getEdgeLabel(label.name)
+        val elementLabel = management.getEdgeLabel(label.name) ?: throw NullPointerException("EdgeLabel doesn't exist")
+
         val property = getOrCreateEdgeProperty(management, elementLabel, convertEdgePropertyToPropertyKey(requestPropertyKey))
         val response = createEdgePropertyProto(property)
         management.commit()

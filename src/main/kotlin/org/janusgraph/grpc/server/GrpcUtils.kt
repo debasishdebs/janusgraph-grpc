@@ -158,7 +158,7 @@ internal fun createEdgeLabelProto(edgeLabel: org.janusgraph.core.EdgeLabel, prop
         .setDirected(convertBooleanDirectedToDirected(edgeLabel.isDirected))
         .build()
 
-internal fun createPropertyKeysProto(propertyKey: org.janusgraph.core.PropertyKey): org.janusgraph.grpc.PropertyKey =
+internal fun createPropertyKeysProto(propertyKey: PropertyKey): org.janusgraph.grpc.PropertyKey =
     org.janusgraph.grpc.PropertyKey.newBuilder()
         .setId(Int64Value.of(propertyKey.longId()))
         .setName(propertyKey.name())
@@ -167,7 +167,7 @@ internal fun createPropertyKeysProto(propertyKey: org.janusgraph.core.PropertyKe
         .build()
 
 internal fun createVertexPropertyKeysProto(propertyKey: PropertyKey): VertexProperty =
-    org.janusgraph.grpc.VertexProperty.newBuilder()
+    VertexProperty.newBuilder()
         .setId(Int64Value.of(propertyKey.longId()))
         .setName(propertyKey.name())
         .setDataType(convertJavaClassToDataType(propertyKey.dataType()))

@@ -17,7 +17,9 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
 
     override fun getVertexLabelsByName(management: JanusGraphManagement, name: String): List<VertexLabel> {
         val vertexLabel = management.getVertexLabel(name) ?: return emptyList()
-
+        println(vertexLabel.mappedProperties())
+        println(vertexLabel.mappedConnections())
+        println(name)
         return listOf(
             createVertexLabelProto(
                 vertexLabel,
@@ -43,7 +45,6 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             management.vertexLabels.first { it.longId() == label.id.value }
                 ?: throw IllegalArgumentException("No vertexLabel found with id")
         } else {
-            print("I'm retrieving vertex label with name " + label.name)
             management.getVertexLabel(label.name)
         }
 
@@ -62,14 +63,13 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         if (!connections.contains(propertyKey)) {
             management.addProperties(label, propertyKey)
         }
+        println(label.mappedProperties() + " ....")
         return propertyKey
     }
 
     override fun ensureVertexLabel(management: JanusGraphManagement, requestLabel: VertexLabel): VertexLabel? {
         val label = getVertexLabel(management, requestLabel)
         val name = requestLabel.name ?: throw NullPointerException("name should not be null")
-
-        println("Label is $label and requestLabel is $requestLabel")
 
         val vertexLabel = when {
             label?.name() == name -> label
@@ -85,19 +85,14 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
                     vertexLabelMaker.partition()
                 val vertexLabel = vertexLabelMaker.make()
 
-                println(requestLabel)
-                println("Label is $name and static is ${requestLabel.readOnly} and partitioned is ${requestLabel.partitioned}")
-
                 vertexLabel
             }
         }
 
-        println("The result object is $vertexLabel")
-        println("Name: ${vertexLabel.name()} readOnly: ${vertexLabel.isStatic} and partitioned: ${vertexLabel.isPartitioned}")
-
         val properties = requestLabel.propertiesList.map { getOrCreateVertexProperty(management, vertexLabel, it) }
         val response = createVertexLabelProto(vertexLabel, properties)
         management.commit()
+
         return response
     }
 
