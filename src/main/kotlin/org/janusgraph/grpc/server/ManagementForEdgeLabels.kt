@@ -101,7 +101,7 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
         requestLabel: EdgeLabel,
         requestIndex: CompositeEdgeIndex
     ): CompositeEdgeIndex? {
-        val label = getEdgeLabel(management, requestLabel) ?: throw NullPointerException("vertex should exists")
+        val label = getEdgeLabel(management, requestLabel) ?: throw NullPointerException("edge should exists")
 
         val keys = requestIndex.propertiesList.map { management.getPropertyKey(it.name) }
         val builder = management.buildIndex(requestIndex.name, Edge::class.java)
@@ -115,6 +115,7 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
         val compositeIndex = CompositeEdgeIndex.newBuilder()
             .setName(graphIndex.name())
             .addAllProperties(properties)
+            .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
             .build()
         management.commit()
         return compositeIndex
@@ -145,6 +146,7 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
                 CompositeEdgeIndex.newBuilder()
                     .setName(it.name)
                     .addAllProperties(it.fieldKeys.map { property -> createEdgePropertyProto(property.fieldKey) })
+                    .setStatus(convertSchemaStatusToString(it.status))
                     .build()
             }
         tx.rollback()
@@ -162,10 +164,33 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
                 CompositeEdgeIndex.newBuilder()
                     .setName(it.name)
                     .addAllProperties(it.fieldKeys.map { property -> createEdgePropertyProto(property.fieldKey) })
+                    .setStatus(convertSchemaStatusToString(it.status))
                     .build()
             }
         tx.rollback()
         return indices
+    }
+
+    override fun ensureCompositeIndexForEdge(
+        management: JanusGraphManagement,
+        requestIndex: CompositeEdgeIndex
+    ): CompositeEdgeIndex? {
+
+        val keys = requestIndex.propertiesList.map { management.getPropertyKey(it.name) }
+        val builder = management.buildIndex(requestIndex.name, Edge::class.java)
+
+        keys.forEach { builder.addKey(it) }
+
+        val graphIndex = builder.buildCompositeIndex()
+        val properties = graphIndex.fieldKeys.map { createEdgePropertyProto(it) }
+
+        val compositeIndex = CompositeEdgeIndex.newBuilder()
+            .setName(graphIndex.name())
+            .addAllProperties(properties)
+            .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
+            .build()
+        management.commit()
+        return compositeIndex
     }
 
     override fun ensureMixedIndexByEdgeLabel(

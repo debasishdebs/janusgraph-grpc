@@ -434,6 +434,7 @@ class ManagementForVertexLabelsTests {
         assertEquals(1, compositeIndex.propertiesCount)
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertEquals("INSTALLED", compositeIndex.status)
         assertFalse(compositeIndex.unique)
     }
 
@@ -493,6 +494,7 @@ class ManagementForVertexLabelsTests {
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertFalse(compositeIndex.unique)
+        assertEquals("INSTALLED", compositeIndex.status)
     }
 
     @Test

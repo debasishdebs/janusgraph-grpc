@@ -53,6 +53,46 @@ class ManagementForEdgeLabelsImpl(
         responseObserver?.onCompleted()
     }
 
+    override fun ensureCompositeIndexByEdgeLabel(
+        request: EnsureCompositeIndexByEdgeLabelRequest?,
+        responseObserver: StreamObserver<CompositeEdgeIndex>?
+    ) {
+        val management = contextManager.getManagement(request?.context)
+        if (management == null) {
+            responseObserver?.onError(Throwable("Incorrect context"))
+            return
+        }
+        if (request?.edgeLabel == null) {
+            responseObserver?.onError(Throwable("Not set edgeLabel"))
+            return
+        }
+        if (request.index == null) {
+            responseObserver?.onError(Throwable("Not set index"))
+            return
+        }
+        val index = managementServer.ensureCompositeIndexByEdgeLabel(management, request.edgeLabel, request.index)
+        responseObserver?.onNext(index)
+        responseObserver?.onCompleted()
+    }
+
+    override fun ensureCompositeIndexForEdge(
+        request: EnsureCompositeIndexForEdgesRequest?,
+        responseObserver: StreamObserver<CompositeEdgeIndex>?
+    ) {
+        val management = contextManager.getManagement(request?.context)
+        if (management == null) {
+            responseObserver?.onError(Throwable("Incorrect context"))
+            return
+        }
+        if (request?.index == null) {
+            responseObserver?.onError(Throwable("Not set index"))
+            return
+        }
+        val index = managementServer.ensureCompositeIndexForEdge(management, request.index)
+        responseObserver?.onNext(index)
+        responseObserver?.onCompleted()
+    }
+
     override fun getCompositeIndicesByEdgeLabel(
         request: GetCompositeIndicesByEdgeLabelRequest?,
         responseObserver: StreamObserver<CompositeEdgeIndex>?
@@ -75,7 +115,7 @@ class ManagementForEdgeLabelsImpl(
         request: GetCompositeIndicesForEdgeRequest,
         responseObserver: StreamObserver<CompositeEdgeIndex>?
     ) {
-        val graph = contextManager.getGraph(request?.context)
+        val graph = contextManager.getGraph(request.context)
         if (graph == null) {
             responseObserver?.onError(Throwable("Incorrect context"))
             return

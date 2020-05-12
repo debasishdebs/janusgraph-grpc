@@ -177,6 +177,7 @@ message CompositeVertexIndex {
     string name = 2;
     repeated VertexProperty properties = 3;
     bool unique = 4;
+    string status = 5;
 }
 
 message GetCompositeIndicesByVertexLabelRequest {
@@ -196,6 +197,11 @@ message EnsureCompositeIndexByVertexLabelRequest {
     JanusGraphContext context = 1;
     VertexLabel vertexLabel = 2;
     CompositeVertexIndex index = 3;
+}
+
+message EnsureCompositeIndexForVerticesRequest {
+    JanusGraphContext context = 1;
+    CompositeVertexIndex index = 2;
 }
 
 message MixedVertexIndex {
@@ -221,6 +227,7 @@ message CompositeEdgeIndex {
     google.protobuf.Int64Value id = 1;
     string name = 2;
     repeated EdgeProperty properties = 3;
+    string status = 4;
 }
 
 message GetCompositeIndicesByEdgeLabelRequest {
@@ -232,6 +239,11 @@ message EnsureCompositeIndexByEdgeLabelRequest {
     JanusGraphContext context = 1;
     EdgeLabel edgeLabel = 2;
     CompositeEdgeIndex index = 3;
+}
+
+message EnsureCompositeIndexForEdgesRequest {
+    JanusGraphContext context = 1;
+    CompositeEdgeIndex index = 2;
 }
 
 message MixedEdgeIndex {
@@ -276,6 +288,7 @@ service ManagementForEdgeLabels {
     rpc EnsureCompositeIndexByEdgeLabel (EnsureCompositeIndexByEdgeLabelRequest) returns (CompositeEdgeIndex);
 
     rpc GetCompositeIndicesForEdge (GetCompositeIndicesForEdgeRequest) returns (stream CompositeEdgeIndex);
+    rpc EnsureCompositeIndexForEdge (EnsureCompositeIndexForEdgesRequest) returns (CompositeEdgeIndex);
 
     rpc GetMixedIndicesByEdgeLabel (GetMixedIndicesByEdgeLabelRequest) returns (stream MixedEdgeIndex);
     rpc EnsureMixedIndexByEdgeLabel (EnsureMixedIndexByEdgeLabelRequest) returns (MixedEdgeIndex);
@@ -290,6 +303,7 @@ service ManagementForVertexLabels{
     rpc EnsureCompositeIndexByVertexLabel (EnsureCompositeIndexByVertexLabelRequest) returns (CompositeVertexIndex);
 
     rpc GetCompositeIndicesForVertex (GetCompositeIndicesForVertexRequest) returns (stream CompositeVertexIndex);
+    rpc EnsureCompositeIndexForVertex (EnsureCompositeIndexForVerticesRequest) returns (CompositeVertexIndex);
 
     rpc GetMixedIndicesByVertexLabel (GetMixedIndicesByVertexLabelRequest) returns (stream MixedVertexIndex);
     rpc EnsureMixedIndexByVertexLabel (EnsureMixedIndexByVertexLabelRequest) returns (MixedVertexIndex);

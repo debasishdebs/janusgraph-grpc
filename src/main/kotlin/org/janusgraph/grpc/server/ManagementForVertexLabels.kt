@@ -124,6 +124,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             .setName(graphIndex.name())
             .addAllProperties(properties)
             .setUnique(graphIndex.isUnique)
+            .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
             .build()
         management.commit()
         return compositeVertexIndex
@@ -155,6 +156,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
                     .setName(it.name)
                     .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyKeysProto(property.fieldKey) })
                     .setUnique(it.cardinality == Cardinality.SINGLE)
+                    .setStatus(convertSchemaStatusToString(it.status))
                     .build()
             }
         tx.rollback()
@@ -173,10 +175,37 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
                     .setName(it.name)
                     .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyKeysProto(property.fieldKey) })
                     .setUnique(it.cardinality == Cardinality.SINGLE)
+                    .setStatus(convertSchemaStatusToString(it.status))
                     .build()
             }
         tx.rollback()
         return indices
+    }
+
+    override fun ensureCompositeIndexForVertex(
+        management: JanusGraphManagement,
+        requestIndex: CompositeVertexIndex
+    ): CompositeVertexIndex? {
+
+        val keys = requestIndex.propertiesList.map { management.getPropertyKey(it.name) }
+        val builder = management.buildIndex(requestIndex.name, Vertex::class.java)
+
+        if (requestIndex.unique)
+            builder.unique()
+
+        keys.forEach { builder.addKey(it) }
+
+        val graphIndex = builder.buildCompositeIndex()
+        val properties = graphIndex.fieldKeys.map { createVertexPropertyKeysProto(it) }
+
+        val compositeVertexIndex = CompositeVertexIndex.newBuilder()
+            .setName(graphIndex.name())
+            .addAllProperties(properties)
+            .setUnique(graphIndex.isUnique)
+            .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
+            .build()
+        management.commit()
+        return compositeVertexIndex
     }
 
     override fun ensureMixedIndexByVertexLabel(

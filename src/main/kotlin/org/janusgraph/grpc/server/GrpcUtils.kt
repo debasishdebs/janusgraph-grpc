@@ -9,6 +9,7 @@ import org.janusgraph.core.JanusGraphVertex
 import org.janusgraph.core.Multiplicity
 import org.janusgraph.core.PropertyKey
 import org.janusgraph.core.attribute.Geoshape
+import org.janusgraph.core.schema.SchemaStatus
 import org.janusgraph.graphdb.internal.JanusGraphSchemaCategory
 import org.janusgraph.graphdb.query.QueryUtil
 import org.janusgraph.graphdb.transaction.StandardJanusGraphTx
@@ -79,6 +80,15 @@ internal fun convertVertexPropertyToPropertyKey(propertyKey: VertexProperty): or
         .setCardinality(propertyKey.cardinality)
         .setDataType(propertyKey.dataType)
         .build()
+}
+
+internal fun convertSchemaStatusToString(status: SchemaStatus): String {
+    return when (status) {
+        SchemaStatus.ENABLED -> "ENABLED"
+        SchemaStatus.DISABLED -> "DISABLED"
+        SchemaStatus.INSTALLED -> "INSTALLED"
+        SchemaStatus.REGISTERED -> "REGISTERED"
+    }
 }
 
 internal fun convertEdgePropertyToPropertyKey(propertyKey: EdgeProperty): org.janusgraph.grpc.PropertyKey {

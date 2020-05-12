@@ -12,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
+import kotlin.system.exitProcess
 
 class ManagementForEdgeLabelsTests {
 
@@ -328,6 +329,7 @@ class ManagementForEdgeLabelsTests {
         assertEquals(1, compositeIndex.propertiesCount)
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertEquals("INSTALLED", compositeIndex.status)
     }
 
     @Test
@@ -373,6 +375,8 @@ class ManagementForEdgeLabelsTests {
         assertEquals(1, compositeIndex.propertiesCount)
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertEquals("INSTALLED", compositeIndex.status)
+
     }
 
     @Test

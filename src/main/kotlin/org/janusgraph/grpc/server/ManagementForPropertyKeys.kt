@@ -28,6 +28,8 @@ class ManagementForPropertyKeys: IManagementForPropertyKeys {
             createPropertyKeysProto(property)
         } else {
             val edgeLabel = management.getEdgeLabel(label)
+                ?: throw IllegalAccessException("no vertex or edge found with label=${label}")
+
             val property = getOrCreateEdgeProperty(management, edgeLabel, requestPropertyKey)
             createPropertyKeysProto(property)
         }
