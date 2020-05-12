@@ -118,7 +118,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         keys.forEach { builder.addKey(it) }
 
         val graphIndex = builder.buildCompositeIndex()
-        val properties = graphIndex.fieldKeys.map { createVertexPropertyProto(it) }
+        val properties = graphIndex.fieldKeys.map { createVertexPropertyKeysProto(it) }
 
         val compositeVertexIndex = CompositeVertexIndex.newBuilder()
             .setName(graphIndex.name())
@@ -153,7 +153,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             .map {
                 CompositeVertexIndex.newBuilder()
                     .setName(it.name)
-                    .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyProto(property.fieldKey) })
+                    .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyKeysProto(property.fieldKey) })
                     .setUnique(it.cardinality == Cardinality.SINGLE)
                     .build()
             }
@@ -171,7 +171,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             .map {
                 CompositeVertexIndex.newBuilder()
                     .setName(it.name)
-                    .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyProto(property.fieldKey) })
+                    .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyKeysProto(property.fieldKey) })
                     .setUnique(it.cardinality == Cardinality.SINGLE)
                     .build()
             }
@@ -193,7 +193,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         keys.forEach { builder.addKey(it) }
 
         val graphIndex = builder.buildMixedIndex(requestIndex.backend)
-        val properties = graphIndex.fieldKeys.map { createVertexPropertyProto(it) }
+        val properties = graphIndex.fieldKeys.map { createVertexPropertyKeysProto(it) }
 
         val compositeVertexIndex = MixedVertexIndex.newBuilder()
             .setName(graphIndex.name())
@@ -218,7 +218,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
                 MixedVertexIndex.newBuilder()
                     .setName(it.name)
                     .setBackend(it.backingIndexName)
-                    .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyProto(property.fieldKey) })
+                    .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyKeysProto(property.fieldKey) })
                     .build()
             }
         tx.rollback()

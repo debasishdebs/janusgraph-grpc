@@ -36,15 +36,16 @@ enum PropertyDataType {
     Uuid = 12;
 }
 
+enum Cardinality {
+    Single = 0;
+    List = 1;
+    Set = 2;
+}
+
 message VertexProperty {
     google.protobuf.Int64Value id = 1;
     string name = 2;
     PropertyDataType dataType = 3;
-    enum Cardinality {
-        Single = 0;
-        List = 1;
-        Set = 2;
-    }
     Cardinality cardinality = 4;
 }
 
@@ -52,11 +53,6 @@ message PropertyKey {
     google.protobuf.Int64Value id = 1;
     string name = 2;
     PropertyDataType dataType = 3;
-    enum Cardinality {
-        Single = 0;
-        List = 1;
-        Set = 2;
-    }
     Cardinality cardinality = 4;
 }
 
@@ -133,13 +129,13 @@ message EnsurePropertyKeyRequest {
 
 message EnsurePropertyKeyForVertexLabelRequest {
     JanusGraphContext context = 1;
-    PropertyKey property = 2;
+    VertexProperty property = 2;
     VertexLabel label = 3;
 }
 
 message EnsurePropertyKeyForEdgeLabelRequest {
     JanusGraphContext context = 1;
-    PropertyKey property = 2;
+    EdgeProperty property = 2;
     EdgeLabel label = 3;
 }
 
@@ -262,13 +258,11 @@ service AccessContext {
 }
 
 service ManagementForPropertyKeys {
-    rpc GetPropertyKeysForVertexLabel (GetVertexPropertyKeysRequest) returns (stream VertexProperty);
-    rpc GetPropertyKeysForEdgeLabel (GetEdgePropertyKeysRequest) returns (stream EdgeProperty);
     rpc GetPropertyKeys (GetPropertyKeysRequest) returns (stream PropertyKey);
-    rpc GetPropertyKeyByName (GetPropertyKeyByNameRequest) returns (stream PropertyKey);
+    rpc GetPropertyKeyByName (GetPropertyKeyByNameRequest) returns (PropertyKey);
 
     rpc EnsurePropertyKeyForLabel (EnsurePropertyKeyForLabelRequest) returns (PropertyKey);
-    rpc EnsurePropertyKeyFor (EnsurePropertyKeyRequest) returns (PropertyKey);
+    rpc EnsurePropertyKey (EnsurePropertyKeyRequest) returns (PropertyKey);
     rpc EnsurePropertyKeyForVertexLabel (EnsurePropertyKeyForVertexLabelRequest) returns (VertexProperty);
     rpc EnsurePropertyKeyForEdgeLabel (EnsurePropertyKeyForEdgeLabelRequest) returns (EdgeProperty);
 }

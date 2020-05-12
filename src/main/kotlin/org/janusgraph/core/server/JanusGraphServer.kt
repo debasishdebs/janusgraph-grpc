@@ -47,6 +47,12 @@ class JanusGraphServer(settings: JanusGraphSettings) {
                         graphManager
                     )
                 )
+                .addService(
+                    ManagementForPropertyKeysImpl(
+                        ManagementForPropertyKeys(),
+                        graphManager
+                    )
+                )
                 .build()
         }
     }

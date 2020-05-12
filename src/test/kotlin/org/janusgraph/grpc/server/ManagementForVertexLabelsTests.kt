@@ -46,7 +46,7 @@ class ManagementForVertexLabelsTests {
         name: String = "propertyName",
         id: Long? = null,
         dataType: PropertyDataType = PropertyDataType.Int32,
-        cardinality: VertexProperty.Cardinality = VertexProperty.Cardinality.Single
+        cardinality: Cardinality = Cardinality.Single
     ): VertexProperty {
         val builder = VertexProperty.newBuilder()
             .setName(name)
@@ -141,8 +141,8 @@ class ManagementForVertexLabelsTests {
     }
 
     @ParameterizedTest
-    @EnumSource(VertexProperty.Cardinality::class, mode = EnumSource.Mode.EXCLUDE, names = ["UNRECOGNIZED"])
-    fun `ensureVertexLabel creates property`(propertyCardinality: VertexProperty.Cardinality) {
+    @EnumSource(Cardinality::class, mode = EnumSource.Mode.EXCLUDE, names = ["UNRECOGNIZED"])
+    fun `ensureVertexLabel creates property`(propertyCardinality: Cardinality) {
         val (managementServer, graph) = createDefaults()
         val propertyName = "propertyName"
         val property = buildProperty(propertyName, cardinality = propertyCardinality)
@@ -277,8 +277,8 @@ class ManagementForVertexLabelsTests {
     }
 
     @ParameterizedTest
-    @EnumSource(VertexProperty.Cardinality::class, mode = EnumSource.Mode.EXCLUDE, names = ["UNRECOGNIZED"])
-    fun `getVertexLabelsByName returns property`(propertyCardinality: VertexProperty.Cardinality) {
+    @EnumSource(Cardinality::class, mode = EnumSource.Mode.EXCLUDE, names = ["UNRECOGNIZED"])
+    fun `getVertexLabelsByName returns property`(propertyCardinality: Cardinality) {
         val (managementServer, graph) = createDefaults()
         val propertyName = "propertyName"
         val property = buildProperty(propertyName, cardinality = propertyCardinality)
@@ -353,7 +353,7 @@ class ManagementForVertexLabelsTests {
         val property = buildProperty(
             propertyName,
             dataType = PropertyDataType.Boolean,
-            cardinality = VertexProperty.Cardinality.List
+            cardinality = Cardinality.List
         )
         buildLabel("test1", properties = listOf(property), managementServer= managementServer, graph = graph)
         buildLabel("test2", properties = listOf(property), managementServer= managementServer, graph = graph)
@@ -367,8 +367,8 @@ class ManagementForVertexLabelsTests {
         assertEquals(propertyName, vertexLabel2?.propertiesList?.firstOrNull()?.name)
         assertEquals(PropertyDataType.Boolean, vertexLabel1?.propertiesList?.firstOrNull()?.dataType)
         assertEquals(PropertyDataType.Boolean, vertexLabel2?.propertiesList?.firstOrNull()?.dataType)
-        assertEquals(VertexProperty.Cardinality.List, vertexLabel1?.propertiesList?.firstOrNull()?.cardinality)
-        assertEquals(VertexProperty.Cardinality.List, vertexLabel2?.propertiesList?.firstOrNull()?.cardinality)
+        assertEquals(Cardinality.List, vertexLabel1?.propertiesList?.firstOrNull()?.cardinality)
+        assertEquals(Cardinality.List, vertexLabel2?.propertiesList?.firstOrNull()?.cardinality)
     }
 
     @Test

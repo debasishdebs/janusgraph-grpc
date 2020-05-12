@@ -55,20 +55,39 @@ internal fun convertJavaClassToDataType(dataType: Class<*>): PropertyDataType? =
         else -> PropertyDataType.UNRECOGNIZED
     }
 
-internal fun convertCardinalityToJavaClass(cardinality: VertexProperty.Cardinality): Cardinality =
+internal fun convertCardinalityToJavaClass(cardinality: org.janusgraph.grpc.Cardinality): Cardinality =
     when (cardinality) {
-        VertexProperty.Cardinality.Single -> Cardinality.SINGLE
-        VertexProperty.Cardinality.List -> Cardinality.LIST
-        VertexProperty.Cardinality.Set -> Cardinality.SET
-        VertexProperty.Cardinality.UNRECOGNIZED -> TODO()
+        org.janusgraph.grpc.Cardinality.Single -> Cardinality.SINGLE
+        org.janusgraph.grpc.Cardinality.List -> Cardinality.LIST
+        org.janusgraph.grpc.Cardinality.Set -> Cardinality.SET
+        org.janusgraph.grpc.Cardinality.UNRECOGNIZED -> TODO()
     }
 
-internal fun convertJavaClassToCardinality(cardinality: Cardinality): VertexProperty.Cardinality? {
+internal fun convertJavaClassToCardinality(cardinality: Cardinality): org.janusgraph.grpc.Cardinality? {
     return when (cardinality) {
-        Cardinality.SINGLE -> VertexProperty.Cardinality.Single
-        Cardinality.LIST -> VertexProperty.Cardinality.List
-        Cardinality.SET -> VertexProperty.Cardinality.Set
+        Cardinality.SINGLE -> org.janusgraph.grpc.Cardinality.Single
+        Cardinality.LIST -> org.janusgraph.grpc.Cardinality.List
+        Cardinality.SET -> org.janusgraph.grpc.Cardinality.Set
     }
+}
+
+
+internal fun convertVertexPropertyToPropertyKey(propertyKey: VertexProperty): org.janusgraph.grpc.PropertyKey {
+    return org.janusgraph.grpc.PropertyKey.newBuilder()
+        .setId(propertyKey.id)
+        .setName(propertyKey.name)
+        .setCardinality(propertyKey.cardinality)
+        .setDataType(propertyKey.dataType)
+        .build()
+}
+
+internal fun convertEdgePropertyToPropertyKey(propertyKey: EdgeProperty): org.janusgraph.grpc.PropertyKey {
+    return org.janusgraph.grpc.PropertyKey.newBuilder()
+        .setId(propertyKey.id)
+        .setName(propertyKey.name)
+        .setCardinality(null)
+        .setDataType(propertyKey.dataType)
+        .build()
 }
 
 internal fun convertMultiplicityToJavaClass(multiplicity: EdgeLabel.Multiplicity): Multiplicity =
@@ -106,19 +125,11 @@ internal fun convertJavaClassMultiplicity(multiplicity: Multiplicity): EdgeLabel
     }
 }
 
-internal fun createVertexPropertyProto(property: PropertyKey): VertexProperty =
-    VertexProperty.newBuilder()
-        .setId(Int64Value.of(property.longId()))
-        .setName(property.name())
-        .setDataType(convertJavaClassToDataType(property.dataType()))
-        .setCardinality(convertJavaClassToCardinality(property.cardinality()))
-        .build()
-
 internal fun createVertexLabelProto(vertexLabel: org.janusgraph.core.VertexLabel, properties: List<PropertyKey>) =
     VertexLabel.newBuilder()
         .setId(Int64Value.of(vertexLabel.longId()))
         .setName(vertexLabel.name())
-        .addAllProperties(properties.map { createVertexPropertyProto(it) })
+        .addAllProperties(properties.map { createVertexPropertyKeysProto(it) })
         .setPartitioned(vertexLabel.isPartitioned)
         .setReadOnly(vertexLabel.isStatic)
         .build()
@@ -136,6 +147,22 @@ internal fun createEdgeLabelProto(edgeLabel: org.janusgraph.core.EdgeLabel, prop
         .addAllProperties(properties.map { createEdgePropertyProto(it) })
         .setMultiplicity(convertJavaClassMultiplicity(edgeLabel.multiplicity()))
         .setDirected(convertBooleanDirectedToDirected(edgeLabel.isDirected))
+        .build()
+
+internal fun createPropertyKeysProto(propertyKey: org.janusgraph.core.PropertyKey): org.janusgraph.grpc.PropertyKey =
+    org.janusgraph.grpc.PropertyKey.newBuilder()
+        .setId(Int64Value.of(propertyKey.longId()))
+        .setName(propertyKey.name())
+        .setDataType(convertJavaClassToDataType(propertyKey.dataType()))
+        .setCardinality(convertJavaClassToCardinality(propertyKey.cardinality()))
+        .build()
+
+internal fun createVertexPropertyKeysProto(propertyKey: PropertyKey): VertexProperty =
+    org.janusgraph.grpc.VertexProperty.newBuilder()
+        .setId(Int64Value.of(propertyKey.longId()))
+        .setName(propertyKey.name())
+        .setDataType(convertJavaClassToDataType(propertyKey.dataType()))
+        .setCardinality(convertJavaClassToCardinality(propertyKey.cardinality()))
         .build()
 
 internal fun getGraphIndices(tx: StandardJanusGraphTx, clazz: Class<out Element>): List<IndexType> =
