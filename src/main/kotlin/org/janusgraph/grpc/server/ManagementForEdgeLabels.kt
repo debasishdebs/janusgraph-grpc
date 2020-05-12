@@ -6,7 +6,10 @@ import org.janusgraph.core.Cardinality
 import org.janusgraph.core.Multiplicity
 import org.janusgraph.core.PropertyKey
 import org.janusgraph.core.schema.JanusGraphManagement
+import org.janusgraph.core.schema.SchemaAction
+import org.janusgraph.core.schema.SchemaStatus
 import org.janusgraph.graphdb.database.StandardJanusGraph
+import org.janusgraph.graphdb.database.management.ManagementSystem
 import org.janusgraph.graphdb.transaction.StandardJanusGraphTx
 import org.janusgraph.graphdb.types.CompositeIndexType
 import org.janusgraph.graphdb.types.MixedIndexType
@@ -56,24 +59,20 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
                     edgeLabelMaker.multiplicity(convertMultiplicityToJavaClass(requestLabel.multiplicity))
 
                 if (requestLabel.directed != null) {
-                    println("$name is the directed status" + requestLabel.directed)
                     if (convertDirectedToBool(requestLabel.directed)) {
                         edgeLabelMaker.directed()
-                        println("I'm creating directed edge")
                     }
                     else {
                         edgeLabelMaker.unidirected()
-                        println("I'm creating undirected edge")
                     }
                 }
 
-                print("Creating edge label with name " + name + " and multiplicity " + requestLabel.multiplicity.toString() + " and directed " + requestLabel.directed.toString())
                 edgeLabelMaker.make()
             }
         }
         val properties = requestLabel.propertiesList.map { getOrCreateEdgeProperty(management, edgeLabel, it) }
         val response = createEdgeLabelProto(edgeLabel, properties)
-        print("Edge Label" + edgeLabel.name() + " and directed ? : " + edgeLabel.isDirected.toString() + " and multiplicity ? :" + edgeLabel.multiplicity().toString())
+
         management.commit()
         return response
     }
@@ -153,6 +152,27 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
         return indices
     }
 
+    override fun getEdgeCompositeIndexByName(
+        graph: StandardJanusGraph,
+        indexName: String
+    ): CompositeEdgeIndex {
+        val tx = graph.buildTransaction().disableBatchLoading().start() as StandardJanusGraphTx
+        val graphIndexes = getGraphIndices(tx, Edge::class.java)
+        val indices = graphIndexes
+            .filterIsInstance<CompositeIndexType>()
+            .filter { it.name == indexName }
+            .map {
+                CompositeEdgeIndex.newBuilder()
+                    .setName(it.name)
+                    .addAllProperties(it.fieldKeys.map { property -> createEdgePropertyProto(property.fieldKey) })
+                    .setStatus(convertSchemaStatusToString(it.status))
+                    .setLabel(it.schemaTypeConstraint.toString())
+                    .build()
+            }
+        tx.rollback()
+        return indices.first()
+    }
+
     override fun getCompositeIndicesForEdge(
         graph: StandardJanusGraph
     ): List<CompositeEdgeIndex> {
@@ -169,6 +189,28 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
             }
         tx.rollback()
         return indices
+    }
+
+    override fun enableCompositeIndexByName(graph: StandardJanusGraph, indexName: String): CompositeEdgeIndex {
+        ManagementSystem.awaitGraphIndexStatus(graph, indexName).call()
+
+        val management = graph.openManagement()
+        val index = management.getGraphIndex(indexName)
+        if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.REGISTERED) {
+            management.updateIndex(index, SchemaAction.ENABLE_INDEX)
+        } else if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.INSTALLED)
+            throw IllegalAccessError("Exception in converting Index from INSTALLED to REGISTERED/ENABLED")
+        else if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.DISABLED)
+            throw IllegalAccessException("Index can't be created on Index with status DISABLED")
+
+        val compositeIndex = CompositeEdgeIndex.newBuilder()
+            .setName(index.name())
+            .addAllProperties(index.fieldKeys.map { createEdgePropertyProto(it) })
+            .setStatus(convertSchemaStatusToString(index.getIndexStatus(index.fieldKeys[0])))
+            .build()
+        management.commit()
+
+        return compositeIndex
     }
 
     override fun ensureCompositeIndexForEdge(

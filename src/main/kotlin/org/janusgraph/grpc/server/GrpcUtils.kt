@@ -118,7 +118,6 @@ internal fun convertDirectedToBool(directed: EdgeLabel.Directed): Boolean =
     }
 
 internal fun convertBooleanDirectedToDirected(directedStatus: Boolean): EdgeLabel.Directed {
-    print("Is directed edge ? $directedStatus")
     return when (directedStatus) {
         true -> EdgeLabel.Directed.directed_edge
         false -> EdgeLabel.Directed.undirected_edge

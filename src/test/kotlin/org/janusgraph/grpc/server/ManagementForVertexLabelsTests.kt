@@ -439,6 +439,27 @@ class ManagementForVertexLabelsTests {
     }
 
     @Test
+    fun `ensureCompositeIndexByVertexLabel create basic index and enable it`() {
+        val (managementServer, graph) = createDefaults()
+
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
+
+        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)!!
+
+        assertNotNull(compositeIndex.id)
+        assertEquals("test", compositeIndex.name)
+        assertEquals(1, compositeIndex.propertiesCount)
+        assertNotNull(compositeIndex.propertiesList.first().id)
+        assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertEquals("INSTALLED", compositeIndex.status)
+
+        val compositeEdgeIndex = managementServer.enableCompositeIndexByName(graph, compositeIndex.name)
+        assertEquals("ENABLED", compositeEdgeIndex.status)
+    }
+
+    @Test
     fun `ensureCompositeIndexByVertexLabel create unique index`() {
         val (managementServer, graph) = createDefaults()
         val property = buildProperty(dataType = PropertyDataType.String)
@@ -461,6 +482,74 @@ class ManagementForVertexLabelsTests {
         val index = buildCompositeIndex("test", properties = listOf(property1, property2))
 
         val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)!!
+
+        assertEquals(2, compositeIndex.propertiesCount)
+        assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
+        assertTrue(compositeIndex.propertiesList.any { it.name == property2.name })
+    }
+
+    @Test
+    fun `ensureCompositeIndexForVertex create basic index`() {
+        val (managementServer, graph) = createDefaults()
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
+
+        val compositeIndex = managementServer.ensureCompositeIndexForVertex(graph.openManagement(), index)!!
+
+        assertNotNull(compositeIndex.id)
+        assertEquals("test", compositeIndex.name)
+        assertEquals(1, compositeIndex.propertiesCount)
+        assertNotNull(compositeIndex.propertiesList.first().id)
+        assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertEquals("INSTALLED", compositeIndex.status)
+        assertFalse(compositeIndex.unique)
+    }
+
+    @Test
+    fun `ensureCompositeIndexForVertex create basic index and enable it`() {
+        val (managementServer, graph) = createDefaults()
+
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
+
+        val compositeIndex = managementServer.ensureCompositeIndexForVertex(graph.openManagement(), index)!!
+
+        assertNotNull(compositeIndex.id)
+        assertEquals("test", compositeIndex.name)
+        assertEquals(1, compositeIndex.propertiesCount)
+        assertNotNull(compositeIndex.propertiesList.first().id)
+        assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertEquals("INSTALLED", compositeIndex.status)
+
+        val compositeEdgeIndex = managementServer.enableCompositeIndexByName(graph, compositeIndex.name)
+        assertEquals("ENABLED", compositeEdgeIndex.status)
+    }
+
+    @Test
+    fun `ensureCompositeIndexForVertex create unique index`() {
+        val (managementServer, graph) = createDefaults()
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", unique = true, properties = listOf(label.propertiesList!!.first()))
+
+        val compositeIndex = managementServer.ensureCompositeIndexForVertex(graph.openManagement(), index)!!
+
+        assertTrue(compositeIndex.unique)
+    }
+
+    @Test
+    fun `ensureCompositeIndexForVertex create index with two properties`() {
+        val (managementServer, graph) = createDefaults()
+        val property1 = buildProperty("property1", dataType = PropertyDataType.String)
+        val property2 = buildProperty("property2", dataType = PropertyDataType.String)
+        val property3 = buildProperty("property3", dataType = PropertyDataType.String)
+        val label =
+            buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(property1, property2))
+
+        val compositeIndex = managementServer.ensureCompositeIndexForVertex(graph.openManagement(), index)!!
 
         assertEquals(2, compositeIndex.propertiesCount)
         assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
@@ -523,6 +612,57 @@ class ManagementForVertexLabelsTests {
         managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)!!
 
         val compositeIndex = managementServer.getCompositeIndicesByVertexLabel(graph, label).first()
+
+        assertEquals(2, compositeIndex.propertiesCount)
+        assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
+        assertTrue(compositeIndex.propertiesList.any { it.name == property2.name })
+    }
+
+    @Test
+    fun `getCompositeIndexForVertex basic index`() {
+        val (managementServer, graph) = createDefaults()
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
+        managementServer.ensureCompositeIndexForVertex(graph.openManagement(), index)
+
+        val compositeIndex = managementServer.getVertexCompositeIndexByName(graph, "test")
+
+        assertNotNull(compositeIndex.id)
+        assertEquals("test", compositeIndex.name)
+        assertEquals(1, compositeIndex.propertiesCount)
+        assertNotNull(compositeIndex.propertiesList.first().id)
+        assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertFalse(compositeIndex.unique)
+        assertEquals("INSTALLED", compositeIndex.status)
+    }
+
+    @Test
+    fun `getCompositeIndexForVertex create unique index`() {
+        val (managementServer, graph) = createDefaults()
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", unique = true, properties = listOf(label.propertiesList!!.first()))
+
+        managementServer.ensureCompositeIndexForVertex(graph.openManagement(), index)
+
+        val compositeIndex = managementServer.getVertexCompositeIndexByName(graph, "test")
+
+        assertTrue(compositeIndex.unique)
+    }
+
+    @Test
+    fun `getCompositeIndexForVertex create index with two properties`() {
+        val (managementServer, graph) = createDefaults()
+        val property1 = buildProperty("property1", dataType = PropertyDataType.String)
+        val property2 = buildProperty("property2", dataType = PropertyDataType.String)
+        val property3 = buildProperty("property3", dataType = PropertyDataType.String)
+        val label =
+            buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(property1, property2))
+        managementServer.ensureCompositeIndexForVertex(graph.openManagement(), index)!!
+
+        val compositeIndex = managementServer.getVertexCompositeIndexByName(graph, "test")
 
         assertEquals(2, compositeIndex.propertiesCount)
         assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })

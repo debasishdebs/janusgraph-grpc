@@ -4,14 +4,14 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.janusgraph.core.Cardinality
 import org.janusgraph.core.PropertyKey
 import org.janusgraph.core.schema.JanusGraphManagement
+import org.janusgraph.core.schema.SchemaAction
+import org.janusgraph.core.schema.SchemaStatus
 import org.janusgraph.graphdb.database.StandardJanusGraph
+import org.janusgraph.graphdb.database.management.ManagementSystem
 import org.janusgraph.graphdb.transaction.StandardJanusGraphTx
 import org.janusgraph.graphdb.types.CompositeIndexType
 import org.janusgraph.graphdb.types.MixedIndexType
-import org.janusgraph.grpc.CompositeVertexIndex
-import org.janusgraph.grpc.MixedVertexIndex
-import org.janusgraph.grpc.VertexLabel
-import org.janusgraph.grpc.VertexProperty
+import org.janusgraph.grpc.*
 
 class ManagementForVertexLabels : IManagementForVertexLabels {
 
@@ -125,6 +125,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             .addAllProperties(properties)
             .setUnique(graphIndex.isUnique)
             .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
+            .setLabel(requestLabel.name)
             .build()
         management.commit()
         return compositeVertexIndex
@@ -157,10 +158,41 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
                     .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyKeysProto(property.fieldKey) })
                     .setUnique(it.cardinality == Cardinality.SINGLE)
                     .setStatus(convertSchemaStatusToString(it.status))
+                    .setLabel(it.schemaTypeConstraint.toString())
                     .build()
             }
         tx.rollback()
         return indices
+    }
+
+    override fun getVertexCompositeIndexByName(
+        graph: StandardJanusGraph,
+        indexName: String
+    ): CompositeVertexIndex {
+        val tx = graph.buildTransaction().disableBatchLoading().start() as StandardJanusGraphTx
+        val graphIndexes = getGraphIndices(tx, Vertex::class.java)
+        val indices = graphIndexes
+            .filterIsInstance<CompositeIndexType>()
+            .filter { it.name == indexName }
+            .map {
+
+                val label: String
+                if (it.schemaTypeConstraint == null)
+                    label = "ALL"
+                else
+                    label = it.schemaTypeConstraint.toString()
+
+                println(it.schemaTypeConstraint)
+                CompositeVertexIndex.newBuilder()
+                    .setName(it.name)
+                    .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyKeysProto(property.fieldKey) })
+                    .setUnique(it.cardinality == Cardinality.SINGLE)
+                    .setStatus(convertSchemaStatusToString(it.status))
+                    .setLabel(label)
+                    .build()
+            }
+        tx.rollback()
+        return indices.first()
     }
 
     override fun getCompositeIndicesForVertex(
@@ -171,15 +203,46 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         val indices = graphIndexes
             .filterIsInstance<CompositeIndexType>()
             .map {
+
+                val label: String
+                if (it.schemaTypeConstraint == null)
+                    label = "ALL"
+                else
+                    label = it.schemaTypeConstraint.toString()
+
                 CompositeVertexIndex.newBuilder()
                     .setName(it.name)
                     .addAllProperties(it.fieldKeys.map { property -> createVertexPropertyKeysProto(property.fieldKey) })
                     .setUnique(it.cardinality == Cardinality.SINGLE)
                     .setStatus(convertSchemaStatusToString(it.status))
+                    .setLabel(label)
                     .build()
             }
         tx.rollback()
         return indices
+    }
+
+    override fun enableCompositeIndexByName(graph: StandardJanusGraph, indexName: String): CompositeVertexIndex {
+        ManagementSystem.awaitGraphIndexStatus(graph, indexName).call()
+
+        val management = graph.openManagement()
+        val index = management.getGraphIndex(indexName)
+        if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.REGISTERED) {
+            management.updateIndex(index, SchemaAction.ENABLE_INDEX)
+            println("Changed from REGISTERED to ENABLED")
+        } else if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.INSTALLED)
+            throw IllegalAccessError("Exception in converting Index from INSTALLED to REGISTERED/ENABLED")
+        else if (index.getIndexStatus(index.fieldKeys[0]) == SchemaStatus.DISABLED)
+            throw IllegalAccessException("Index can't be created on Index with status DISABLED")
+
+        val compositeIndex = CompositeVertexIndex.newBuilder()
+            .setName(index.name())
+            .addAllProperties(index.fieldKeys.map { createVertexPropertyKeysProto(it) })
+            .setStatus(convertSchemaStatusToString(index.getIndexStatus(index.fieldKeys[0])))
+            .build()
+        management.commit()
+
+        return compositeIndex
     }
 
     override fun ensureCompositeIndexForVertex(
@@ -203,6 +266,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             .addAllProperties(properties)
             .setUnique(graphIndex.isUnique)
             .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
+            .setLabel("ALL")
             .build()
         management.commit()
         return compositeVertexIndex

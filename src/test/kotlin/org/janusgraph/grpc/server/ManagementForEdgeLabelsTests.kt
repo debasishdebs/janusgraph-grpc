@@ -3,6 +3,8 @@ package org.janusgraph.grpc.server
 import com.google.protobuf.Int64Value
 import com.sun.org.apache.xpath.internal.operations.Bool
 import org.janusgraph.core.JanusGraph
+import org.janusgraph.core.schema.SchemaStatus
+import org.janusgraph.graphdb.database.management.ManagementSystem
 import org.janusgraph.grpc.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.*
@@ -318,6 +320,7 @@ class ManagementForEdgeLabelsTests {
     @Test
     fun `ensureCompositeIndexByEdgeLabel create basic index`() {
         val (managementServer, graph) = createDefaults()
+
         val property = buildProperty(dataType = PropertyDataType.String)
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
@@ -330,6 +333,27 @@ class ManagementForEdgeLabelsTests {
         assertNotNull(compositeIndex.propertiesList.first().id)
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
+    }
+
+    @Test
+    fun `ensureCompositeIndexByEdgeLabelAndEnableIt create basic index and enable it`() {
+        val (managementServer, graph) = createDefaults()
+
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
+
+        val compositeIndex = managementServer.ensureCompositeIndexByEdgeLabel(graph.openManagement(), label, index)!!
+
+        assertNotNull(compositeIndex.id)
+        assertEquals("test", compositeIndex.name)
+        assertEquals(1, compositeIndex.propertiesCount)
+        assertNotNull(compositeIndex.propertiesList.first().id)
+        assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertEquals("INSTALLED", compositeIndex.status)
+
+        val compositeEdgeIndex = managementServer.enableCompositeIndexByName(graph, compositeIndex.name)
+        assertEquals("ENABLED", compositeEdgeIndex.status)
     }
 
     @Test
@@ -391,6 +415,43 @@ class ManagementForEdgeLabelsTests {
         managementServer.ensureCompositeIndexByEdgeLabel(graph.openManagement(), label, index)!!
 
         val compositeIndex = managementServer.getCompositeIndicesByEdgeLabel(graph, label).first()
+
+        assertEquals(2, compositeIndex.propertiesCount)
+        assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
+        assertTrue(compositeIndex.propertiesList.any { it.name == property2.name })
+    }
+
+    @Test
+    fun `getCompositeIndicesForEdge basic index`() {
+        val (managementServer, graph) = createDefaults()
+        val property = buildProperty(dataType = PropertyDataType.String)
+        val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
+        managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)
+
+        val compositeIndex = managementServer.getEdgeCompositeIndexByName(graph, "test")
+
+        assertNotNull(compositeIndex.id)
+        assertEquals("test", compositeIndex.name)
+        assertEquals(1, compositeIndex.propertiesCount)
+        assertNotNull(compositeIndex.propertiesList.first().id)
+        assertEquals("propertyName", compositeIndex.propertiesList.first().name)
+        assertEquals("INSTALLED", compositeIndex.status)
+
+    }
+
+    @Test
+    fun `getCompositeIndicesForEdge create index with two properties`() {
+        val (managementServer, graph) = createDefaults()
+        val property1 = buildProperty("property1", dataType = PropertyDataType.String)
+        val property2 = buildProperty("property2", dataType = PropertyDataType.String)
+        val property3 = buildProperty("property3", dataType = PropertyDataType.String)
+        val label =
+            buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
+        val index = buildCompositeIndex("test", properties = listOf(property1, property2))
+        managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)!!
+
+        val compositeIndex = managementServer.getEdgeCompositeIndexByName(graph, "test")
 
         assertEquals(2, compositeIndex.propertiesCount)
         assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })

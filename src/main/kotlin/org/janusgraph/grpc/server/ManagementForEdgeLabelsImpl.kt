@@ -75,6 +75,21 @@ class ManagementForEdgeLabelsImpl(
         responseObserver?.onCompleted()
     }
 
+    override fun enableCompositeIndexByName(
+        request: EnableCompositeIndexByNameRequest,
+        responseObserver: StreamObserver<CompositeEdgeIndex>
+    ) {
+        val graph = contextManager.getGraph(request.context)
+        if (graph == null) {
+            responseObserver.onError(Throwable("Incorrect context"))
+            return
+        }
+
+        val index = managementServer.enableCompositeIndexByName(graph, request.name)
+        responseObserver.onNext(index)
+        responseObserver.onCompleted()
+    }
+
     override fun ensureCompositeIndexForEdge(
         request: EnsureCompositeIndexForEdgesRequest?,
         responseObserver: StreamObserver<CompositeEdgeIndex>?
@@ -108,6 +123,24 @@ class ManagementForEdgeLabelsImpl(
         }
         val indices = managementServer.getCompositeIndicesByEdgeLabel(graph, request.edgeLabel)
         indices.forEach { responseObserver?.onNext(it) }
+        responseObserver?.onCompleted()
+    }
+
+    override fun getEdgeCompositeIndexByName(
+        request: GetCompositeIndicesByNameRequest?,
+        responseObserver: StreamObserver<CompositeEdgeIndex>?
+    ) {
+        val graph = contextManager.getGraph(request?.context)
+        if (graph == null) {
+            responseObserver?.onError(Throwable("Incorrect context"))
+            return
+        }
+        if (request?.indexName == null) {
+            responseObserver?.onError(Throwable("indexName not set for querying CompositeIndex"))
+            return
+        }
+        val index = managementServer.getEdgeCompositeIndexByName(graph, request.indexName)
+        responseObserver?.onNext(index)
         responseObserver?.onCompleted()
     }
 
