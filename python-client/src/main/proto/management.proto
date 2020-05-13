@@ -36,15 +36,16 @@ enum PropertyDataType {
     Uuid = 12;
 }
 
+enum Cardinality {
+    Single = 0;
+    List = 1;
+    Set = 2;
+}
+
 message VertexProperty {
     google.protobuf.Int64Value id = 1;
     string name = 2;
     PropertyDataType dataType = 3;
-    enum Cardinality {
-        Single = 0;
-        List = 1;
-        Set = 2;
-    }
     Cardinality cardinality = 4;
 }
 
@@ -52,11 +53,6 @@ message PropertyKey {
     google.protobuf.Int64Value id = 1;
     string name = 2;
     PropertyDataType dataType = 3;
-    enum Cardinality {
-        Single = 0;
-        List = 1;
-        Set = 2;
-    }
     Cardinality cardinality = 4;
 }
 
@@ -133,13 +129,13 @@ message EnsurePropertyKeyRequest {
 
 message EnsurePropertyKeyForVertexLabelRequest {
     JanusGraphContext context = 1;
-    PropertyKey property = 2;
+    VertexProperty property = 2;
     VertexLabel label = 3;
 }
 
 message EnsurePropertyKeyForEdgeLabelRequest {
     JanusGraphContext context = 1;
-    PropertyKey property = 2;
+    EdgeProperty property = 2;
     EdgeLabel label = 3;
 }
 
@@ -161,6 +157,11 @@ message GetPropertyKeysRequest {
     JanusGraphContext context = 1;
 }
 
+message GetPropertyKeyByNameRequest {
+    JanusGraphContext context = 1;
+    string name = 2;
+}
+
 //message GetOutgoingEdgesByVertexLabelRequest {
 //    JanusGraphContext context = 1;
 //    VertexLabel fromVertex = 2;
@@ -176,11 +177,18 @@ message CompositeVertexIndex {
     string name = 2;
     repeated VertexProperty properties = 3;
     bool unique = 4;
+    string label = 5;
+    string status = 6;
 }
 
 message GetCompositeIndicesByVertexLabelRequest {
     JanusGraphContext context = 1;
     VertexLabel vertexLabel = 2;
+}
+
+message GetCompositeIndicesByNameRequest {
+    JanusGraphContext context = 1;
+    string indexName = 2;
 }
 
 message GetCompositeIndicesForVertexRequest {
@@ -195,6 +203,11 @@ message EnsureCompositeIndexByVertexLabelRequest {
     JanusGraphContext context = 1;
     VertexLabel vertexLabel = 2;
     CompositeVertexIndex index = 3;
+}
+
+message EnsureCompositeIndexForVerticesRequest {
+    JanusGraphContext context = 1;
+    CompositeVertexIndex index = 2;
 }
 
 message MixedVertexIndex {
@@ -220,6 +233,8 @@ message CompositeEdgeIndex {
     google.protobuf.Int64Value id = 1;
     string name = 2;
     repeated EdgeProperty properties = 3;
+    string label = 4;
+    string status = 5;
 }
 
 message GetCompositeIndicesByEdgeLabelRequest {
@@ -231,6 +246,21 @@ message EnsureCompositeIndexByEdgeLabelRequest {
     JanusGraphContext context = 1;
     EdgeLabel edgeLabel = 2;
     CompositeEdgeIndex index = 3;
+}
+
+message EnsureCompositeIndexForEdgesRequest {
+    JanusGraphContext context = 1;
+    CompositeEdgeIndex index = 2;
+}
+
+message EnableVertexCompositeIndexByNameRequest {
+    JanusGraphContext context = 1;
+    CompositeVertexIndex index = 2;
+}
+
+message EnableEdgeCompositeIndexByNameRequest {
+    JanusGraphContext context = 1;
+    CompositeEdgeIndex index = 2;
 }
 
 message MixedEdgeIndex {
@@ -257,14 +287,10 @@ service AccessContext {
 }
 
 service ManagementForPropertyKeys {
-    rpc GetPropertyKeysForVertex (GetVertexPropertyKeysRequest) returns (stream VertexProperty);
-    rpc GetPropertyKeysForEdge (GetEdgePropertyKeysRequest) returns (stream EdgeProperty);
     rpc GetPropertyKeys (GetPropertyKeysRequest) returns (stream PropertyKey);
+    rpc GetPropertyKeyByName (GetPropertyKeyByNameRequest) returns (PropertyKey);
 
-    rpc EnsurePropertyKeyForLabel (EnsurePropertyKeyForLabelRequest) returns (PropertyKey);
-    rpc EnsurePropertyKeyFor (EnsurePropertyKeyRequest) returns (PropertyKey);
-    rpc EnsurePropertyKeyForVertexLabel (EnsurePropertyKeyForVertexLabelRequest) returns (VertexProperty);
-    rpc EnsurePropertyKeyForEdgeLabel (EnsurePropertyKeyForEdgeLabelRequest) returns (EdgeProperty);
+    rpc EnsurePropertyKey (EnsurePropertyKeyRequest) returns (PropertyKey);
 }
 
 service ManagementForEdgeLabels {
@@ -273,9 +299,13 @@ service ManagementForEdgeLabels {
     rpc EnsureEdgeLabel (EnsureEdgeLabelRequest) returns (EdgeLabel);
 
     rpc GetCompositeIndicesByEdgeLabel (GetCompositeIndicesByEdgeLabelRequest) returns (stream CompositeEdgeIndex);
+    rpc GetEdgeCompositeIndexByName (GetCompositeIndicesByNameRequest) returns (CompositeEdgeIndex);
     rpc EnsureCompositeIndexByEdgeLabel (EnsureCompositeIndexByEdgeLabelRequest) returns (CompositeEdgeIndex);
 
     rpc GetCompositeIndicesForEdge (GetCompositeIndicesForEdgeRequest) returns (stream CompositeEdgeIndex);
+    rpc EnsureCompositeIndexForEdge (EnsureCompositeIndexForEdgesRequest) returns (CompositeEdgeIndex);
+
+    rpc EnableEdgeCompositeIndex (EnableEdgeCompositeIndexByNameRequest) returns (CompositeEdgeIndex);
 
     rpc GetMixedIndicesByEdgeLabel (GetMixedIndicesByEdgeLabelRequest) returns (stream MixedEdgeIndex);
     rpc EnsureMixedIndexByEdgeLabel (EnsureMixedIndexByEdgeLabelRequest) returns (MixedEdgeIndex);
@@ -287,9 +317,12 @@ service ManagementForVertexLabels{
     rpc EnsureVertexLabel (EnsureVertexLabelRequest) returns (VertexLabel);
 
     rpc GetCompositeIndicesByVertexLabel (GetCompositeIndicesByVertexLabelRequest) returns (stream CompositeVertexIndex);
+    rpc GetVertexCompositeIndexByName (GetCompositeIndicesByNameRequest) returns (CompositeVertexIndex);
     rpc EnsureCompositeIndexByVertexLabel (EnsureCompositeIndexByVertexLabelRequest) returns (CompositeVertexIndex);
 
     rpc GetCompositeIndicesForVertex (GetCompositeIndicesForVertexRequest) returns (stream CompositeVertexIndex);
+    rpc EnsureCompositeIndexForVertex (EnsureCompositeIndexForVerticesRequest) returns (CompositeVertexIndex);
+    rpc EnableVertexCompositeIndex (EnableVertexCompositeIndexByNameRequest) returns (CompositeVertexIndex);
 
     rpc GetMixedIndicesByVertexLabel (GetMixedIndicesByVertexLabelRequest) returns (stream MixedVertexIndex);
     rpc EnsureMixedIndexByVertexLabel (EnsureMixedIndexByVertexLabelRequest) returns (MixedVertexIndex);
