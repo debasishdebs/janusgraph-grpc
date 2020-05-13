@@ -2,6 +2,7 @@ from collections.abc import Iterable
 
 from janusgraph.management.element.vertex_label import VertexLabel
 from janusgraph.management.element.edge_label import EdgeLabel
+from janusgraph.management.element.property_key import PropertyKey
 
 
 def is_custom_property_present(message, property_name):
@@ -13,7 +14,33 @@ def is_custom_property_present(message, property_name):
 
 
 def convert_response_to_python_property_key(response):
-    return None
+    properties = []
+
+    if isinstance(response, Iterable):
+        for resp in response:
+            property_key = PropertyKey(resp.name)
+            property_key.set_id(resp.id)
+
+            if is_custom_property_present(resp, "dataType"):
+                property_key.set_data_type(resp.data_type)
+
+            if is_custom_property_present(resp, "cardinality"):
+                property_key.set_cardinality(resp.cardinality)
+
+            properties.append(property_key)
+    else:
+        property_key = PropertyKey(response.name)
+        property_key.set_id(response.id)
+
+        if is_custom_property_present(response, "dataType"):
+            property_key.set_data_type(response.data_type)
+
+        if is_custom_property_present(response, "cardinality"):
+            property_key.set_cardinality(response.cardinality)
+
+        properties.append(property_key)
+
+    return properties
 
 
 def convert_response_to_python_vertex_label(response):

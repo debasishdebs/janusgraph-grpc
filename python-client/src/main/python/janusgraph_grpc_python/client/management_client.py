@@ -43,7 +43,7 @@ if __name__ == '__main__':
     print("=======================")
 
     channel = grpc.insecure_channel(f'{host}:{port}')
-    action.set_graph_name("graph_berkleydb")
+    action.set_graph_name("graph_inmemory")
     action.set_operation(op)
     action.set_channel(channel)
 

@@ -1,9 +1,8 @@
 import grpc
-from typing import List
 
 from janusgraph.management.builder.vertex_label_maker import VertexLabelMaker, VertexLabelGetter
 from janusgraph.management.builder.edge_label_maker import EdgeLabelMaker, EdgeLabelGetter
-from janusgraph.management.builder.property_key_maker import PropertyKeyMaker
+from janusgraph.management.builder.property_key_maker import PropertyKeyMaker, PropertyKeyGetter
 from janusgraph.management.builder.composite_index_maker import CompositeIndexMaker
 
 
@@ -69,6 +68,24 @@ class JanusGraphManagement:
         maker.set_graph(self.GRAPH)
 
         return maker
+
+    def getPropertyKey(self, name):
+        self._check_if_connection_is_established_()
+
+        getter = PropertyKeyGetter(name)
+        getter.set_channel(self.CHANNEL)
+        getter.set_graph(self.GRAPH)
+
+        return getter.get()
+
+    def getPropertyKeys(self):
+        self._check_if_connection_is_established_()
+
+        getter = PropertyKeyGetter()
+        getter.set_channel(self.CHANNEL)
+        getter.set_graph(self.GRAPH)
+
+        return getter.get()
 
     def getVertexLabel(self, label):
         self._check_if_connection_is_established_()

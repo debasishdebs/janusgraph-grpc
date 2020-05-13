@@ -25,9 +25,11 @@ class VertexLabelMaker(SchemaMaker):
 
     def set_channel(self, channel):
         self.CHANNEL = channel
+        return self
 
     def set_graph(self, graph):
         self.GRAPH = graph
+        return self
 
     def _check_if_valid_params_passed_(self):
         if self.LABEL is None:
@@ -48,8 +50,10 @@ class VertexLabelMaker(SchemaMaker):
         self.METADATA["partitioned"] = True
         return self
 
-    def setProperty(self, vertex_property):
-        raise NotImplementedError("Not implemented adding VertexProperty constraint to VertexLabel")
+    def setPropertyConstraint(self, vertex_property):
+        self.METADATA["properties"] = vertex_property
+        print("Not implemented adding VertexProperty constraint to VertexLabel")
+        return self
 
     def make(self):
         self._check_if_valid_params_passed_()

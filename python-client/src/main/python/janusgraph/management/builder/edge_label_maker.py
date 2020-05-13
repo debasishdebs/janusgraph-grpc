@@ -28,9 +28,11 @@ class EdgeLabelMaker(SchemaMaker):
 
     def set_channel(self, channel):
         self.CHANNEL = channel
+        return self
 
     def set_graph(self, graph):
         self.GRAPH = graph
+        return self
 
     def _check_if_valid_params_passed_(self):
         if self.LABEL is None:
@@ -58,8 +60,10 @@ class EdgeLabelMaker(SchemaMaker):
         self.METADATA["directed"] = False
         return self
 
-    def setProperty(self, edge_property):
-        raise NotImplementedError("Not implemented adding VertexProperty constraint to VertexLabel")
+    def setPropertyConstraint(self, edge_property):
+        self.METADATA["properties"] = edge_property
+        print("Not implemented adding VertexProperty constraint to EdgeLabel")
+        return self
 
     def make(self):
         self._check_if_valid_params_passed_()
