@@ -17,15 +17,12 @@ class Property(GraphElement):
         self.OPTIONAL_OPERATOR = None
         self.OPTIONAL_METADATA = optional_metadata
 
-        print(self.element_label, " ==== ")
-
         if self.element_label is not "ALL":
             self.ELEMENT = management_pb2.PropertyKey(name=self.element_label)
         else:
             raise AttributeError("PropertyKey can't be called with <label> as ALL")
 
     def get_element(self):
-        print(f"Getting the get_element() with value = {self.ELEMENT} and the class is {type(self.ELEMENT)}")
         return self.ELEMENT
 
     def set_optional_operator(self, addtnl_operator):
@@ -46,7 +43,6 @@ class Property(GraphElement):
                 self.REQUEST = management_pb2.GetPropertyKeyByNameRequest(context=self.CONTEXT, name=self.element_label)
         else:
             if self.element_label is not "ALL":
-                print(self.ELEMENT)
                 self.REQUEST = management_pb2.EnsurePropertyKeyRequest(context=self.CONTEXT, property=self.ELEMENT)
             else:
                 raise NotImplementedError("Implemented PUT operation on PropertyKey when "
@@ -103,9 +99,6 @@ class Property(GraphElement):
             elif isinstance(self.OPTIONAL_OPERATOR, GraphElementAdder):
                 self.ELEMENT = self.OPTIONAL_OPERATOR.get_element()
                 self.__generate_request__()
-
-                print(self.ELEMENT)
-                print(self.ELEMENT.dataType, self.ELEMENT.cardinality, self.ELEMENT.name)
 
                 print("Not yet implemented PUT method for GraphAdder instance in PropertyKey. "
                       "--TODO--[Case when Vertex is added without defaults]")

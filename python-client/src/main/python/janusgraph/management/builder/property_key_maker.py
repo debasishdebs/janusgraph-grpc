@@ -1,6 +1,6 @@
 from .schema_maker import SchemaMaker
 from janusgraph_grpc_python.management.management_pb2 import PropertyDataType
-from janusgraph_grpc_python.management.management_pb2 import VertexProperty
+from janusgraph_grpc_python.management.management_pb2 import Cardinality
 from janusgraph_grpc_python.graph_operation.command_action.graph_operation import GraphOperationMetadata
 from janusgraph_grpc_python.type_class.graph_element_type import GraphElementType
 from janusgraph.utils.conversion_utils import convert_response_to_python_property_key
@@ -57,7 +57,7 @@ class PropertyKeyMaker(SchemaMaker):
                                  f"Allowed dataTypes are {self.allowed_data_types}")
 
     def _check_if_valid_cardinality_passed_(self, cardinality):
-        if cardinality not in self.allowed_data_types:
+        if cardinality not in self.allowed_cardinality:
             raise AttributeError(f"Passed Cardinality {cardinality} is not allowed Cardinality. "
                                  f"Allowed Cardinality are {self.allowed_cardinality}")
 
@@ -67,6 +67,7 @@ class PropertyKeyMaker(SchemaMaker):
 
         self.VERTEX_LABEL = label
         self.LABEL = True
+        return self
 
     def addEdgeLabel(self, label):
         if self.LABEL:
@@ -74,19 +75,16 @@ class PropertyKeyMaker(SchemaMaker):
 
         self.EDGE_LABEL = label
         self.LABEL = True
+        return self
 
     def dataType(self, data_type_string):
         self._check_if_valid_data_type_passed_(data_type_string)
-        self.DATA_TYPE = PropertyDataType.Value(data_type_string)
+        self.DATA_TYPE = data_type_string
         return self
 
     def cardinality(self, cardinality):
         self._check_if_valid_cardinality_passed_(cardinality)
-
-        if cardinality == "Single":
-            self.ELEMENT_TYPE = "EdgeLabel"
-
-        self.CARDINALITY = VertexProperty.Cardinality.Value(cardinality)
+        self.CARDINALITY = cardinality
         return self
 
     def _create_metadata_dict_(self):
@@ -104,7 +102,6 @@ class PropertyKeyMaker(SchemaMaker):
         return metadata
 
     def _create_element_(self):
-        print(self.ELEMENT_TYPE)
         self.ELEMENT = GraphElementType().set(self.ELEMENT_TYPE)
         return self
 
@@ -130,13 +127,17 @@ class PropertyKeyMaker(SchemaMaker):
         if self.LABEL:
             label = self.VERTEX_LABEL if self.VERTEX_LABEL != "ALL" else self.EDGE_LABEL
             if self.EDGE_LABEL == "ALL":
-                VertexLabelMaker(label).set_graph(self.GRAPH).set_channel(self.CHANNEL).setPropertyConstraint(label).make()
+                VertexLabelMaker(label).set_graph(self.GRAPH).set_channel(self.CHANNEL).\
+                    setPropertyConstraint(self.PROPERTY_NAME).make()
             else:
-                EdgeLabelMaker(label).set_graph(self.GRAPH).set_channel(self.CHANNEL).setPropertyConstraint(label).make()
+                EdgeLabelMaker(label).set_graph(self.GRAPH).set_channel(self.CHANNEL).\
+                    setPropertyConstraint(self.PROPERTY_NAME).make()
+
+                property_keys = convert_response_to_python_property_key(processor.operate(), element="EdgeLabel")
 
             for property_key in property_keys:
                 property_key.set_label(label)
-
+        print(property_keys)
         return property_keys
 
 

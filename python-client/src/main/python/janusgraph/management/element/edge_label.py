@@ -1,17 +1,19 @@
 import json
 from janusgraph_grpc_python.management.management_pb2 import EdgeLabel as Edge
+from janusgraph.management.element.property_key import PropertyKey
 
 
 class EdgeLabel:
     ID = None
     LABEL = None
-    PROPERTIES = []
+    PROPERTIES = {}
     DIRECTED = True
     MULTIPLICITY = "Multi"
     DIRECTION = None
 
     def __init__(self, label):
         self.LABEL = label
+        self.PROPERTIES = {}
 
     def set_directed(self, directed):
         directed_name = Edge.Directed.Name(directed)
@@ -30,8 +32,8 @@ class EdgeLabel:
         self.ID = ID.value
 
     def __str__(self):
-        return json.dumps({"id": self.ID, "name": self.LABEL, "directed": self.DIRECTED, "multiplicity": self.MULTIPLICITY,
-                "properties": self.PROPERTIES, "direction": self.DIRECTION})
+        return str({"id": self.ID, "name": self.LABEL, "directed": self.DIRECTED, "multiplicity": self.MULTIPLICITY,
+                "properties": [str(x) for x in self.PROPERTIES.values()], "direction": self.DIRECTION})
 
     def _check_if_valid_edge_label_(self):
         if self.ID is None or self.LABEL is None:
@@ -41,8 +43,14 @@ class EdgeLabel:
         self.DIRECTION = Edge.Direction.Name(direction)
 
     def set_properties(self, properties):
-        if len(properties) > 0:
-            raise NotImplementedError("Not implemented setting properties value from response of gRPC server in EdgeLabel")
+        for prop in properties:
+            ID = prop.id
+            property_key = PropertyKey(prop.name).set_id(ID).set_label(self.LABEL)
+
+            property_key.set_data_type(getattr(prop, "dataType"))
+
+            if ID.value not in self.PROPERTIES:
+                self.PROPERTIES[ID.value] = property_key
 
     def get(self):
         self._check_if_valid_edge_label_()
@@ -58,7 +66,7 @@ class EdgeLabel:
         return self.MULTIPLICITY
 
     def getProperties(self):
-        return self.PROPERTIES
+        return list(self.PROPERTIES.values())
 
     def getDirection(self):
         return self.DIRECTION

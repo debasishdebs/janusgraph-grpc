@@ -33,8 +33,6 @@ class VertexLabelManagementTest(unittest.TestCase):
         self.assertEqual(vertex.getStatic(), default_static)
         self.assertEqual(vertex.getPartitioned(), default_partition)
 
-        print(vertex)
-
         mgmt.close()
 
     def test_create_static_vertex_label(self):

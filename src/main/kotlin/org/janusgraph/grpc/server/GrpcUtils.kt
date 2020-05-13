@@ -145,6 +145,7 @@ internal fun createVertexLabelProto(vertexLabel: org.janusgraph.core.VertexLabel
 
 internal fun createEdgePropertyProto(property: PropertyKey): EdgeProperty =
     EdgeProperty.newBuilder()
+        .setId(Int64Value.of(property.longId()))
         .setName(property.name())
         .setDataType(convertJavaClassToDataType(property.dataType()))
         .build()

@@ -1,5 +1,5 @@
 import json
-from janusgraph.utils.helpers import NpEncoder
+from janusgraph.management.element.property_key import PropertyKey
 
 
 class VertexLabel:
@@ -7,10 +7,11 @@ class VertexLabel:
     LABEL = None
     STATIC = False
     PARTITIONED = False
-    PROPERTIES = []
+    PROPERTIES = {}
 
     def __init__(self, label):
         self.LABEL = label
+        self.PROPERTIES = {}
 
     def set_static(self, is_static):
         self.STATIC = is_static
@@ -24,16 +25,24 @@ class VertexLabel:
         self.ID = ID.value
 
     def __str__(self):
-        return json.dumps({"id": self.ID, "name": self.LABEL, "static": self.STATIC, "partitioned": self.PARTITIONED,
-                "properties": self.PROPERTIES})
+        return str({'id': self.ID, 'name': self.LABEL, 'static': self.STATIC, 'partitioned': self.PARTITIONED,
+                'properties': [str(x) for x in self.PROPERTIES.values()]})
 
     def _check_if_valid_vertex_label_(self):
         if self.ID is None or self.LABEL is None:
             raise ValueError("ID and Label property needs to be defined to define a VertexLabel")
 
     def set_properties(self, properties):
-        if len(properties) > 0:
-            raise NotImplementedError("Not implemented setting properties value from response of gRPC server in VertexLabel")
+        for prop in properties:
+            ID = prop.id
+            property_key = PropertyKey(prop.name).set_id(ID).set_label(self.LABEL)
+
+            property_key.set_data_type(getattr(prop, "dataType"))
+
+            property_key.set_cardinality(getattr(prop, "cardinality"))
+
+            if ID.value not in self.PROPERTIES:
+                self.PROPERTIES[ID.value] = property_key
 
     def get(self):
         self._check_if_valid_vertex_label_()
@@ -49,4 +58,4 @@ class VertexLabel:
         return self.PARTITIONED
 
     def getProperties(self):
-        return self.PROPERTIES
+        return list(self.PROPERTIES.values())

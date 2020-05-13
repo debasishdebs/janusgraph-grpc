@@ -29,7 +29,7 @@ class PropertyKey:
         return self
 
     def __str__(self):
-        return json.dumps({"id": self.ID, "name": self.NAME, "dataType": self.DATA_TYPE, "cardinality": self.CARDINALITY,
+        return str({"id": self.ID, "name": self.NAME, "dataType": self.DATA_TYPE, "cardinality": self.CARDINALITY,
                            "constrainedLabel": self.CONSTRAINED_LABEL})
 
     def _check_if_valid_property_key_(self):
