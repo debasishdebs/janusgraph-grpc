@@ -1,5 +1,6 @@
 import json
 
+
 class PropertyKey:
     ID = None
     NAME = None

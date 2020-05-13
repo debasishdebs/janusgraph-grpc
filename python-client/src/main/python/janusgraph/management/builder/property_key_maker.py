@@ -180,4 +180,6 @@ class PropertyKeyGetter(SchemaMaker):
 
         processor = operation.get_processor()
 
-        return convert_response_to_python_property_key(processor.operate())
+        property_keys = convert_response_to_python_property_key(processor.operate())
+
+        return [x.set_label("UNDEFINED") for x in property_keys]
