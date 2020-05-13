@@ -39,22 +39,21 @@ if __name__ == '__main__':
     print(port)
     print(op)
     print(action)
-    print(type(action))
 
     print("=======================")
 
     channel = grpc.insecure_channel(f'{host}:{port}')
-
+    action.set_graph_name("graph_berkleydb")
     action.set_operation(op)
     action.set_channel(channel)
 
     processor = action.get_processor()
 
     print("================")
-
     response_it = processor.operate()
-
+    print("Operated on " + str(processor))
     print(50*"-")
+
     if isinstance(response_it, Iterable):
         for resp in response_it:
             # print(switcher(str(processor), resp))
@@ -62,7 +61,10 @@ if __name__ == '__main__':
 
     else:
         print(response_it)
+
+    print(50*"-")
+    print("Done executing")
     print(50*"-")
 
-    channel.close()
+    # channel.close()
     pass

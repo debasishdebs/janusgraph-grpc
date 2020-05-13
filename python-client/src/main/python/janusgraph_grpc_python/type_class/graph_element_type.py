@@ -1,11 +1,12 @@
 from janusgraph_grpc_python.structure.element.edge import Edge
 from janusgraph_grpc_python.structure.element.vertex import Vertex
+from janusgraph_grpc_python.structure.element.property import Property
 from janusgraph_grpc_python.structure.element.context_action import Contexts
 
 
 class GraphElementType:
 
-    command_types = ["VertexLabel", "EdgeLabel", "ContextAction"]
+    command_types = ["VertexLabel", "EdgeLabel", "ContextAction", "PropertyKey"]
 
     def __init__(self):
         self.VertexLabel = None
@@ -39,6 +40,8 @@ class GraphElementType:
                 setattr(self, instance, Vertex)
             elif instance == "EdgeLabel":
                 setattr(self, instance, Edge)
+            elif instance == "PropertyKey":
+                setattr(self, instance, Property)
             else:
                 setattr(self, instance, Contexts)
         else:

@@ -88,6 +88,9 @@ class PropertyKeyMaker(SchemaMaker):
     def make(self):
         self._check_if_valid_params_passed_()
 
+        # First we create property without label constraint
+
+
         metadata = self._create_metadata_dict_()
         self._create_element_()
 

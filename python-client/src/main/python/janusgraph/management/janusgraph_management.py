@@ -1,7 +1,9 @@
 import grpc
+from typing import List
 
 from janusgraph.management.builder.vertex_label_maker import VertexLabelMaker, VertexLabelGetter
 from janusgraph.management.builder.edge_label_maker import EdgeLabelMaker, EdgeLabelGetter
+from janusgraph.management.builder.property_key_maker import PropertyKeyMaker
 from janusgraph.management.builder.composite_index_maker import CompositeIndexMaker
 
 
@@ -34,7 +36,23 @@ class JanusGraphManagement:
         if self.HOST is None or self.PORT is None or self.GRAPH is None or self.CHANNEL is None:
             raise ValueError("Please call connect() before calling any make() instances")
 
-    def makeVertexLabel(self, label):
+    def makePropertyKey(self, name) -> PropertyKeyMaker:
+        """
+
+        Args:
+            name (str):
+
+        Returns:
+            PropertyKeyMaker: PropertyKeyMaker object to create property keys
+        """
+
+        maker = PropertyKeyMaker(name)
+        maker.set_channel(self.CHANNEL)
+        maker.set_graph(self.GRAPH)
+
+        return maker
+
+    def makeVertexLabel(self, label) -> VertexLabelMaker:
         self._check_if_connection_is_established_()
 
         maker = VertexLabelMaker(label)
@@ -43,7 +61,7 @@ class JanusGraphManagement:
 
         return maker
 
-    def makeEdgelabel(self, label):
+    def makeEdgelabel(self, label) -> EdgeLabelMaker:
         self._check_if_connection_is_established_()
 
         maker = EdgeLabelMaker(label)

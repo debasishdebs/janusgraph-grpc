@@ -44,21 +44,6 @@ class ManagementForPropertyKeysTests {
         }
         return builder.build()
     }
-    private fun buildEdgeProperty(
-        name: String = "propertyName",
-        id: Long? = null,
-        dataType: PropertyDataType = PropertyDataType.String,
-        cardinality: Cardinality = Cardinality.Single
-    ): EdgeProperty {
-        val builder = EdgeProperty.newBuilder()
-            .setName(name)
-            .setDataType(dataType)
-        if (id != null) {
-            builder.id = Int64Value.of(id)
-        }
-        return builder.build()
-    }
-
 
     @Test
     fun `ensurePropertyKey create default property key`() {
@@ -565,5 +550,24 @@ class ManagementForPropertyKeysTests {
         assertNotNull(propertyKey.id)
         assertEquals(PropertyDataType.Uuid, propertyKey.dataType)
         assertEquals(Cardinality.Set, propertyKey.cardinality)
+    }
+
+    @Test
+    fun `getPropertyKeys get all properties`() {
+        val (managementServer, graph) = createDefaults()
+        val property1 = buildProperty(name="test1")
+        val property2 = buildProperty(name="test2")
+        val property3 = buildProperty(name="test3")
+
+        managementServer.ensurePropertyKey(graph.openManagement(), property1)
+        managementServer.ensurePropertyKey(graph.openManagement(), property2)
+        managementServer.ensurePropertyKey(graph.openManagement(), property3)
+
+        val properties = managementServer.getPropertyKeys(graph.openManagement())
+
+        assertEquals(3, properties.size)
+        assertTrue(properties.any{ it.name == property1.name})
+        assertTrue(properties.any{ it.name == property2.name})
+        assertTrue(properties.any{ it.name == property3.name})
     }
 }

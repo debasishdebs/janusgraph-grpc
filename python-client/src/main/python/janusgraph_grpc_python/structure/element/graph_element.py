@@ -38,5 +38,4 @@ class GraphElement(object):
         return
 
     def __str__(self):
-        print("I'm getting string representation of GraphElement and the element is " + self.element)
         return self.element

@@ -10,7 +10,7 @@ class GraphElementAdder:
     ELEMENT = None
     element_to_update = None
 
-    supported_parameters = ["properties", "readOnly", "partitioned", "direction", "multiplicity", "directed"]
+    supported_parameters = ["properties", "readOnly", "partitioned", "direction", "multiplicity", "directed", "data_type", "cardinality"]
 
     def __init__(self, **kwargs):
         self.properties = None
@@ -19,6 +19,8 @@ class GraphElementAdder:
         self.directed = None
         self.direction = None
         self.multiplicity = None
+        self.data_type = None
+        self.cardinality = None
 
         for property_name, property_value in kwargs.items():
             setattr(self, property_name, property_value)
@@ -50,9 +52,11 @@ class GraphElementAdder:
             self.element_to_update = "VertexLabel"
         elif isinstance(element, management_pb2.EdgeLabel):
             self.element_to_update = "EdgeLabel"
+        elif isinstance(element, management_pb2.PropertyKey):
+            self.element_to_update = "PropertyKey"
         else:
             raise ValueError("Invalid element accessed in setter() method. Expecting class to be "
-                             "EdgeLabel or VertexLabel for " + str(type(element)))
+                             "EdgeLabel or VertexLabel or PropertyKey for " + str(type(element)))
 
     def __build_element__(self):
         for property_name in self.supported_parameters:
@@ -99,6 +103,12 @@ class GraphElementAdder:
 
                 elif property_name == "partitioned":
                     self.ELEMENT.partitioned = value if isinstance(value, bool) else (True if value.lower() == "true" else False)
+
+                elif property_name == "data_type":
+                    self.ELEMENT.dataType = management_pb2.PropertyDataType.Value(value)
+
+                elif property_name == "cardinality":
+                    self.ELEMENT.cardinality = management_pb2.Cardinality.Value(value)
 
                 else:
                     raise ValueError(f"Expecting the keys to be either of {self.supported_parameters} "

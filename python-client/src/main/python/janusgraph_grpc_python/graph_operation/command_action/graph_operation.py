@@ -88,6 +88,9 @@ class GraphOperation:
         elif str(self.processor) == "EdgeLabel":
             self.SERVICE = management_pb2_grpc.ManagementForEdgeLabelsStub(self.CHANNEL)
 
+        elif str(self.processor) == "PropertyKey":
+            self.SERVICE = management_pb2_grpc.ManagementForPropertyKeysStub(self.CHANNEL)
+
         elif str(self.processor) == "ContextAction":
             self.SERVICE = management_pb2_grpc.AccessContextStub(self.CHANNEL)
 

@@ -63,7 +63,6 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         if (!connections.contains(propertyKey)) {
             management.addProperties(label, propertyKey)
         }
-        println(label.mappedProperties() + " ....")
         return propertyKey
     }
 
