@@ -10,7 +10,7 @@ class GraphElementAdder:
     ELEMENT = None
     element_to_update = None
 
-    supported_parameters = ["properties", "readOnly", "partitioned", "direction", "multiplicity", "directed", "data_type", "cardinality"]
+    supported_parameters = ["properties", "readOnly", "partitioned", "direction", "multiplicity", "directed", "dataType", "cardinality", "label"]
 
     def __init__(self, **kwargs):
         self.properties = None
@@ -104,7 +104,7 @@ class GraphElementAdder:
                 elif property_name == "partitioned":
                     self.ELEMENT.partitioned = value if isinstance(value, bool) else (True if value.lower() == "true" else False)
 
-                elif property_name == "data_type":
+                elif property_name == "dataType":
                     self.ELEMENT.dataType = management_pb2.PropertyDataType.Value(value)
 
                 elif property_name == "cardinality":

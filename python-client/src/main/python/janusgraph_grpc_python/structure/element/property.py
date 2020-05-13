@@ -17,6 +17,8 @@ class Property(GraphElement):
         self.OPTIONAL_OPERATOR = None
         self.OPTIONAL_METADATA = optional_metadata
 
+        print(self.element_label, " ==== ")
+
         if self.element_label is not "ALL":
             self.ELEMENT = management_pb2.PropertyKey(name=self.element_label)
         else:
@@ -109,6 +111,5 @@ class Property(GraphElement):
                       "--TODO--[Case when Vertex is added without defaults]")
 
                 return self.service.EnsurePropertyKey(self.REQUEST)
-
             else:
                 raise ValueError("Invalid graph operator got. Expecting either of GraphIndexer of GraphElementAdder")

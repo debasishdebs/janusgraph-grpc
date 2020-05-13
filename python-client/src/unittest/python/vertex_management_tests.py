@@ -10,7 +10,6 @@ class VertexLabelManagementTest(unittest.TestCase):
         self.HOST = "localhost"
         self.PORT = 10182
         self.GRAPH = "graph_inmemory"
-        pass
 
     def test_create_basic_vertex_label(self):
         """Creates a basic vertex label without any extra properties like static, partition etc

@@ -22,7 +22,7 @@ def convert_response_to_python_property_key(response):
             property_key.set_id(resp.id)
 
             if is_custom_property_present(resp, "dataType"):
-                property_key.set_data_type(resp.data_type)
+                property_key.set_data_type(resp.dataType)
 
             if is_custom_property_present(resp, "cardinality"):
                 property_key.set_cardinality(resp.cardinality)
@@ -33,7 +33,7 @@ def convert_response_to_python_property_key(response):
         property_key.set_id(response.id)
 
         if is_custom_property_present(response, "dataType"):
-            property_key.set_data_type(response.data_type)
+            property_key.set_data_type(response.dataType)
 
         if is_custom_property_present(response, "cardinality"):
             property_key.set_cardinality(response.cardinality)

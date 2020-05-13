@@ -1,4 +1,5 @@
 import json
+import janusgraph_grpc_python.management.management_pb2 as management_pb2
 
 
 class PropertyKey:
@@ -12,11 +13,11 @@ class PropertyKey:
         self.NAME = name
 
     def set_data_type(self, data_type):
-        self.DATA_TYPE = data_type
+        self.DATA_TYPE = management_pb2.PropertyDataType.Name(data_type)
         return self
 
     def set_cardinality(self, cardinality):
-        self.CARDINALITY = cardinality
+        self.CARDINALITY = management_pb2.Cardinality.Name(cardinality)
         return self
 
     def set_label(self, label):
@@ -49,4 +50,4 @@ class PropertyKey:
         return self.CARDINALITY
 
     def getConstrainedLabel(self):
-        return self.CONSTRAINED_LABEL
+        return self.CONSTRAINED_LABEL if self.CONSTRAINED_LABEL is not None else "ALL"

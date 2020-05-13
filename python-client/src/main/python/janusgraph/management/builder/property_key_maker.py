@@ -11,8 +11,8 @@ from janusgraph.management.builder.edge_label_maker import EdgeLabelMaker
 class PropertyKeyMaker(SchemaMaker):
     PROPERTY_NAME = None
     DATA_TYPE = "String"
-    CARDINALITY = "SINGLE"
-    ELEMENT_TYPE = "VertexLabel"
+    CARDINALITY = "Single"
+    ELEMENT_TYPE = "PropertyKey"
     VERTEX_LABEL = "ALL"
     EDGE_LABEL = "ALL"
     LABEL = False
@@ -94,9 +94,17 @@ class PropertyKeyMaker(SchemaMaker):
             "dataType": self.DATA_TYPE,
             "cardinality": self.CARDINALITY
         }
+
+        # if self.LABEL:
+        #     if self.VERTEX_LABEL != "ALL":
+        #         metadata["label"] = self.VERTEX_LABEL
+        #     else:
+        #         metadata["label"] = self.EDGE_LABEL
+
         return metadata
 
     def _create_element_(self):
+        print(self.ELEMENT_TYPE)
         self.ELEMENT = GraphElementType().set(self.ELEMENT_TYPE)
         return self
 
@@ -108,7 +116,7 @@ class PropertyKeyMaker(SchemaMaker):
         self._create_element_()
 
         metadata_object = GraphOperationMetadata().set_dict("ADDER", metadata)
-        operation = self.make_operation(element_type=self.ELEMENT, label="ALL", metadata=metadata_object)
+        operation = self.make_operation(element_type=self.ELEMENT, label=self.PROPERTY_NAME, metadata=metadata_object)
 
         operation.set_operation(self.OPERATION)
         operation.set_channel(self.CHANNEL)
