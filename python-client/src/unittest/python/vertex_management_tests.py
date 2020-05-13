@@ -18,7 +18,7 @@ class VertexLabelManagementTest(unittest.TestCase):
 
         """
 
-        default_label = "test1"
+        default_label = "testv1"
         default_static = False
         default_partition = False
 
@@ -36,7 +36,7 @@ class VertexLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_static_vertex_label(self):
-        default_label = "test2"
+        default_label = "testv2"
         default_partition = False
 
         mgmt = JanusGraphManagement().connect(self.HOST, self.PORT, self.GRAPH)
@@ -55,7 +55,7 @@ class VertexLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_partitioned_vertex_label(self):
-        default_label = "test3"
+        default_label = "testv3"
         default_static = False
 
         mgmt = JanusGraphManagement().connect(self.HOST, self.PORT, self.GRAPH)
@@ -74,7 +74,7 @@ class VertexLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_static_partition_vertex_label_exception(self):
-        default_label = "test4"
+        default_label = "testv4"
         default_static = True
         default_partition = True
 
@@ -87,15 +87,15 @@ class VertexLabelManagementTest(unittest.TestCase):
 
     def test_get_vertex(self):
         to_check = {
-            "test1": {
+            "testv1": {
                 "static": False,
                 "partitioned": False
             },
-            "test2": {
+            "testv2": {
                 "static": True,
                 "partitioned": False
             },
-            "test3": {
+            "testv3": {
                 "static": False,
                 "partitioned": True
             }

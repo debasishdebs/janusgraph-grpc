@@ -25,8 +25,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(property_key.getCardinality(), "Single")
         self.assertEqual(property_key.getConstrainedLabel(), "ALL")
 
-          
-
     def test_create_geoshape_data_type_single_property_key(self):
         property_key_name = "test2"
         data_type = "GeoShape"
@@ -42,8 +40,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(property_key.getCardinality(), "Single")
         self.assertEqual(property_key.getConstrainedLabel(), "ALL")
 
-          
-
     def test_create_basic_property_list_cardinality_property_key(self):
         property_key_name = "test3"
 
@@ -57,8 +53,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(property_key.getDataType(), "String")
         self.assertEqual(property_key.getCardinality(), "List")
         self.assertEqual(property_key.getConstrainedLabel(), "ALL")
-
-          
 
     def test_create_float_data_type_set_cardinality_property_key(self):
         property_key_name = "test4"
@@ -75,8 +69,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(property_key.getDataType(), data_type)
         self.assertEqual(property_key.getCardinality(), cardinality)
         self.assertEqual(property_key.getConstrainedLabel(), "ALL")
-
-          
 
     def test_create_basic_property_and_add_vertex_constrains(self):
         property_key_name = "test5"
@@ -104,8 +96,6 @@ class MyTestCase(unittest.TestCase):
         print(property_key)
         self.assertTrue(all(property_key.__str__() == x.__str__() for x in vertex.getProperties()))
 
-          
-
     def test_create_basic_property_and_add_edge_constrains(self):
         property_key_name = "test6"
         constrained_label = "edge1"  # If the edge doesn't exist, it gets added with defaults
@@ -129,8 +119,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(edge.getMultiplicity(), "Multi")
         self.assertEqual(edge.getDirected(), True)
         self.assertTrue(all(property_key.__str__() == x.__str__() for x in edge.getProperties()))
-
-          
 
     def test_create_basic_property_and_multi_cardinality_for_edge_throw_exception(self):
         property_key_name = "test7"
@@ -162,8 +150,6 @@ class MyTestCase(unittest.TestCase):
         properties = self.mgmt.getPropertyKey(property_key_name)[0]
 
         self.assertEqual(properties.getConstrainedLabel(), "UNDEFINED")
-
-          
 
     def test_behaviour_on_redoing_property_key_create_multiple_times_on_same_params(self):
         property_key_name = "test12"
@@ -336,7 +322,6 @@ class MyTestCase(unittest.TestCase):
         # Cardinality of prop2 should be different than the one we retrieved
         self.assertEqual(properties_got.getCardinality(), prop2.getCardinality())
         self.assertEqual(properties_got.getConstrainedLabel(), "UNDEFINED")
-
 
 
 if __name__ == '__main__':

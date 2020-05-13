@@ -18,7 +18,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
 
         """
 
-        default_label = "test1"
+        default_label = "teste1"
         default_multiplicity = "Multi"
         default_directed = True
         default_direction = "BOTH"
@@ -40,7 +40,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_undirecred_edge_label(self):
-        default_label = "test2"
+        default_label = "teste2"
         default_multiplicity = "Multi"
         default_directed = False
         default_direction = "BOTH"
@@ -62,7 +62,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_directed_simple_multiplicity_edge_label(self):
-        default_label = "test3"
+        default_label = "teste3"
         default_multiplicity = "Simple"
         default_directed = True
         default_direction = "BOTH"
@@ -84,7 +84,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_undirected_simple_multiplicity_edge_label(self):
-        default_label = "test4"
+        default_label = "teste4"
         default_multiplicity = "Simple"
         default_directed = False
         default_direction = "BOTH"
@@ -106,7 +106,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_directed_one2many_multiplicity_edge_label(self):
-        default_label = "test5"
+        default_label = "teste5"
         default_multiplicity = "One2Many"
         default_directed = True
         default_direction = "BOTH"
@@ -128,7 +128,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_undirected_one2many_multiplicity_edge_label(self):
-        default_label = "test6"
+        default_label = "teste6"
         default_multiplicity = "One2Many"
         default_directed = False
         default_direction = "BOTH"
@@ -141,7 +141,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_directed_many2one_multiplicity_edge_label(self):
-        default_label = "test7"
+        default_label = "teste7"
         default_multiplicity = "Many2One"
         default_directed = True
         default_direction = "BOTH"
@@ -163,7 +163,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_undirected_many2one_multiplicity_edge_label(self):
-        default_label = "test8"
+        default_label = "teste8"
         default_multiplicity = "Many2One"
         default_directed = False
         default_direction = "BOTH"
@@ -185,7 +185,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_directed_one2one_multiplicity_edge_label(self):
-        default_label = "test9"
+        default_label = "teste9"
         default_multiplicity = "One2One"
         default_directed = True
         default_direction = "BOTH"
@@ -207,7 +207,7 @@ class EdgeLabelManagementTest(unittest.TestCase):
         mgmt.close()
 
     def test_create_undirected_one2one_multiplicity_edge_label(self):
-        default_label = "test10"
+        default_label = "teste10"
         default_multiplicity = "One2One"
         default_directed = False
         default_direction = "BOTH"
@@ -221,42 +221,42 @@ class EdgeLabelManagementTest(unittest.TestCase):
 
     def test_get_edges(self):
         to_check = {
-            "test1": {
+            "teste1": {
                 "multiplicity": "Multi",
                 "directed": True,
                 "direction": "BOTH"
             },
-            "test2": {
+            "teste2": {
                 "multiplicity": "Multi",
                 "directed": False,
                 "direction": "BOTH"
             },
-            "test3": {
+            "teste3": {
                 "multiplicity": "Simple",
                 "directed": True,
                 "direction": "BOTH"
             },
-            "test4": {
+            "teste4": {
                 "multiplicity": "Simple",
                 "directed": False,
                 "direction": "BOTH"
             },
-            "test5": {
+            "teste5": {
                 "multiplicity": "One2Many",
                 "directed": True,
                 "direction": "BOTH"
             },
-            "test7": {
+            "teste7": {
                 "multiplicity": "Many2One",
                 "directed": True,
                 "direction": "BOTH"
             },
-            "test8": {
+            "teste8": {
                 "multiplicity": "Many2One",
                 "directed": False,
                 "direction": "BOTH"
             },
-            "test9": {
+            "teste9": {
                 "multiplicity": "One2One",
                 "directed": True,
                 "direction": "BOTH"
