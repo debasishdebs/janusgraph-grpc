@@ -19,8 +19,6 @@ class Property(GraphElement):
 
         if self.element_label is not "ALL":
             self.ELEMENT = management_pb2.PropertyKey(name=self.element_label)
-        else:
-            raise AttributeError("PropertyKey can't be called with <label> as ALL")
 
     def get_element(self):
         return self.ELEMENT
@@ -43,7 +41,10 @@ class Property(GraphElement):
                 self.REQUEST = management_pb2.GetPropertyKeyByNameRequest(context=self.CONTEXT, name=self.element_label)
         else:
             if self.element_label is not "ALL":
-                self.REQUEST = management_pb2.EnsurePropertyKeyRequest(context=self.CONTEXT, property=self.ELEMENT)
+                if self.ELEMENT is not None:
+                    self.REQUEST = management_pb2.EnsurePropertyKeyRequest(context=self.CONTEXT, property=self.ELEMENT)
+                else:
+                    ValueError("Somehow self.ELEMENT didn't get initialized in property.py")
             else:
                 raise NotImplementedError("Implemented PUT operation on PropertyKey when "
                                           "a vertexLabel name is provided not when ALL")

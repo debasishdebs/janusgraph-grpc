@@ -3,7 +3,8 @@ import grpc
 from janusgraph.management.builder.vertex_label_maker import VertexLabelMaker, VertexLabelGetter
 from janusgraph.management.builder.edge_label_maker import EdgeLabelMaker, EdgeLabelGetter
 from janusgraph.management.builder.property_key_maker import PropertyKeyMaker, PropertyKeyGetter
-from janusgraph.management.builder.composite_index_maker import CompositeIndexMaker
+from janusgraph.management.builder.composite_index_maker import CompositeIndexMaker, CompositeIndexEnabler, CompositeIndexGetter
+from janusgraph.management.element.composite_index import CompositeIndex
 
 
 class JanusGraphManagement:
@@ -127,4 +128,43 @@ class JanusGraphManagement:
         self._check_if_connection_is_established_()
 
         maker = CompositeIndexMaker(name)
-        return
+        maker.set_graph(self.GRAPH)
+        maker.set_channel(self.CHANNEL)
+
+        return maker
+
+    def getVertexCompositeIndex(self, name):
+        self._check_if_connection_is_established_()
+
+        getter = CompositeIndexGetter("VertexLabel")
+        getter.set_graph(self.GRAPH)
+        getter.set_channel(self.CHANNEL)
+        getter.restrict_name(name)
+
+        return getter.get()
+
+    def getEdgeCompositeIndex(self, name):
+        self._check_if_connection_is_established_()
+
+        getter = CompositeIndexGetter("EdgeLabel")
+        getter.set_graph(self.GRAPH)
+        getter.set_channel(self.CHANNEL)
+        getter.restrict_name(name)
+
+        return getter.get()
+
+    def enableCompositeIndex(self, index):
+        """
+
+        Args:
+            index (CompositeIndex):
+
+        Returns:
+
+        """
+        enabler = CompositeIndexEnabler()
+        enabler.set_index(index)
+        enabler.set_channel(self.CHANNEL)
+        enabler.set_graph(self.GRAPH)
+
+        return enabler

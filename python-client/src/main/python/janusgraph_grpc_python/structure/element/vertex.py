@@ -17,8 +17,8 @@ class Vertex(GraphElement):
         self.OPTIONAL_OPERATOR = None
         self.OPTIONAL_METADATA = optional_metadata
 
-        if self.element_label is not "ALL":
-            self.ELEMENT = management_pb2.VertexLabel(name=self.element_label)
+        # if self.element_label is not "ALL":
+        self.ELEMENT = management_pb2.VertexLabel(name=self.element_label)
 
     def get_element(self):
         return self.ELEMENT
@@ -39,19 +39,23 @@ class Vertex(GraphElement):
                 self.REQUEST = management_pb2.GetVertexLabelsRequest(context=self.CONTEXT)
             else:
                 self.REQUEST = management_pb2.GetVertexLabelsByNameRequest(context=self.CONTEXT, name=self.element_label)
-        else:
+        elif self.operation == "PUT":
             if self.element_label is not "ALL":
                 self.REQUEST = management_pb2.EnsureVertexLabelRequest(context=self.CONTEXT, label=self.ELEMENT)
             else:
                 raise NotImplementedError("Implemented PUT operation on VertexLabel when "
-                                          "a vertexLabel name is provided not when ALL")
+                                      "a vertexLabel name is provided not when ALL")
+        else:
+            raise NotImplementedError("Implemented only GET/PUT in generate_request in vertex.py")
         return self
 
     def __get__(self):
+        is_indexing_operation = isinstance(self.OPTIONAL_OPERATOR, GraphIndexer)
+
         self.__generate_context__()
-        self.__generate_request__()
 
         if self.OPTIONAL_METADATA is None:
+            self.__generate_request__()
             if self.element_label == "ALL":
                 elem = self.service.GetVertexLabels(self.REQUEST)
             else:
@@ -61,7 +65,7 @@ class Vertex(GraphElement):
         else:
             self.OPTIONAL_OPERATOR.set_context(self.CONTEXT)
 
-            if isinstance(self.OPTIONAL_OPERATOR, GraphIndexer):
+            if is_indexing_operation:
                 if self.element_label == "ALL":
                     indexer = self.OPTIONAL_OPERATOR.get_indexer()
                     return indexer.get_all_indices()
@@ -75,23 +79,29 @@ class Vertex(GraphElement):
                                           "Because logically different")
 
     def __put__(self):
+        is_indexing_operation = isinstance(self.OPTIONAL_OPERATOR, GraphIndexer)
+        is_addition_operation = isinstance(self.OPTIONAL_OPERATOR, GraphElementAdder)
+
         self.__generate_context__()
-        self.__generate_request__()
+
         if self.OPTIONAL_METADATA is None:
+            self.__generate_request__()
             return self.service.EnsureVertexLabel(self.REQUEST)
 
         else:
-            if isinstance(self.OPTIONAL_OPERATOR, GraphIndexer):
+            if is_indexing_operation:
                 self.OPTIONAL_OPERATOR.set_context(self.CONTEXT)
 
                 if self.element_label == "ALL":
-                    raise NotImplementedError("Not yet implemented PUT operation on index with ALL VertexLabel. TODO")
-                    pass
+                    print("Not yet implemented PUT operation on index with ALL VertexLabel. TODO")
+                    indexer = self.OPTIONAL_OPERATOR.get_indexer()
+                    return indexer.put_index_across_all_labels()
+
                 else:
                     indexer = self.OPTIONAL_OPERATOR.get_indexer()
+                    return indexer.put_index_by_label()
 
-                    return indexer.put_index()
-            elif isinstance(self.OPTIONAL_OPERATOR, GraphElementAdder):
+            elif is_addition_operation:
                 self.ELEMENT = self.OPTIONAL_OPERATOR.get_element()
                 self.__generate_request__()
 
@@ -102,3 +112,18 @@ class Vertex(GraphElement):
 
             else:
                 raise ValueError("Invalid graph operator got. Expecting either of GraphIndexer of GraphElementAdder")
+
+    def __enable__(self):
+        # This is called only during Indexing operation to Enable an index
+        # Metadata will NOT BE NONE
+        # Additional Operator will be Indexer. element_label != ALL
+        self.__generate_context__()
+        self.OPTIONAL_OPERATOR.set_context(self.CONTEXT)
+
+        if self.element_label == "ALL":
+            print("ELEMENT_LABEL is ALL in enabling index. Ignoring it though")
+            indexer = self.OPTIONAL_OPERATOR.get_indexer()
+            return indexer.enable_index_by_name()
+
+        else:
+            raise NotImplementedError("Not Implemented enabling all indices specific to a label")

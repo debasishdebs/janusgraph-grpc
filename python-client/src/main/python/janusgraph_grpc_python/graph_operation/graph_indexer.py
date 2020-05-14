@@ -5,7 +5,7 @@ from janusgraph_grpc_python.management import management_pb2
 
 
 class GraphIndexer:
-    supported_parameters = ["index_type", "index_name", "index_on", "index_only", "unique_index"]
+    supported_parameters = ["index_type", "index_name", "index_on", "index_only", "unique_index", "element_to_index"]
 
     CONTEXT = None
     SERVICE = None
@@ -37,14 +37,15 @@ class GraphIndexer:
 
         """
         self.ELEMENT = element
+        return self
 
-        if isinstance(element, management_pb2.VertexLabel):
-            self.element_to_index = "VertexLabel"
-        elif isinstance(element, management_pb2.EdgeLabel):
-            self.element_to_index = "EdgeLabel"
-        else:
-            raise ValueError("Invalid element accessed in setter() method. Expecting class to be "
-                             "EdgeLabel or VertexLabel for " + str(type(element)))
+        # if isinstance(element, management_pb2.VertexLabel):
+        #     self.element_to_index = "VertexLabel"
+        # elif isinstance(element, management_pb2.EdgeLabel):
+        #     self.element_to_index = "EdgeLabel"
+        # else:
+        #     raise ValueError("Invalid element accessed in setter() method. Expecting class to be "
+        #                      "EdgeLabel or VertexLabel for " + str(type(element)))
 
     def set_context(self, context):
         self.CONTEXT = context
@@ -52,24 +53,18 @@ class GraphIndexer:
     def set_service(self, stub):
         self.SERVICE = stub
 
+    def set_element_to_index(self, element_to_index):
+        self.element_to_index = element_to_index
+        print(f"Setting element_to_index as {element_to_index} for {self.index_type}")
+        return self
+
     # def set_channel(self, channel):
     #     self.CHANNEL = channel
 
     def get_indexer(self):
 
-        # print("========= I'm inside get_indexer() ==========")
-        # print(self.supported_parameters)
-        # print(self.__dict__)
-        # print(self.__dict__.keys())
-        # print(self.__dict__.values())
-        # print(self.ELEMENT)
-        # print(self.element_to_index)
-        # print(self.ELEMENT.name)
-        # print({k: self.__dict__.get(k) for k in self.supported_parameters})
-        # print("========= I'm inside get_indexer() ==========")
-
-        from structure.index.composite_index import CompositeIndex
-        from structure.index.mixed_index import MixedIndex
+        from janusgraph_grpc_python.structure.index.composite_index import CompositeIndex
+        from janusgraph_grpc_python.structure.index.mixed_index import MixedIndex
 
         if self.element_to_index is None:
             raise ValueError("Please call set_element() to identify the element to be Indexed before calling get_indexer()")
@@ -101,7 +96,10 @@ class GraphIndexer:
         # idx.set_channel(self.CHANNEL)
         return idx
 
-    def put_index(self):
+    def put_index_by_label(self):
+        raise NotImplementedError(f"{str(self)} is not subclassed by any other class yet so no put_index() implemented")
+
+    def put_index_across_all_labels(self):
         raise NotImplementedError(f"{str(self)} is not subclassed by any other class yet so no put_index() implemented")
 
     def get_indices_by_label(self):
@@ -109,6 +107,9 @@ class GraphIndexer:
 
     def get_all_indices(self):
         raise NotImplementedError(f"{str(self)} is not subclassed by any other class yet so no get_index() implemented")
+
+    def enable_index_by_name(self):
+        raise NotImplementedError(f"{str(self)} is not subclassed by any other class yet so no enable_index_by_name() implemented")
 
     def __are_valid_parameters_passed__(self, **kwargs):
         valid_params_passed = all([x in self.supported_parameters for x in kwargs.keys()])
@@ -125,18 +126,14 @@ class GraphIndexer:
             raise NotImplementedError("Implemented index_on with String attribute only. "
                                       f"TODO for dict with key as propertyKey and value as Mapping parameter. Got {type(self.index_on)}")
 
-        if "unique_index" in kwargs and kwargs["unique_index"] == True:
-            raise NotImplementedError("Not implemented adding property of index_uniqueness to Index yet. TODO")
+        # if "unique_index" in kwargs and kwargs["unique_index"] == True:
+        #     raise NotImplementedError("Not implemented adding property of index_uniqueness to Index yet. TODO")
 
     def __are_required_parameters_set__(self, parameters=None):
         # The compulsory parameters are the ones which are initialized as either None or as empty object
         # Optional parameters are already defaulted to a value other than None or Empty object
         if parameters is None:
             parameters = self.supported_parameters
-
-        print("Verifying validity of params intialized")
-        print(parameters)
-        print("====================")
 
         for parameter in parameters:
             if getattr(self, parameter) is None:

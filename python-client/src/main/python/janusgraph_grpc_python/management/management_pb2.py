@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='grpc',
   syntax='proto3',
   serialized_options=b'\n\023org.janusgraph.grpcB\017ManagementProtoP\001',
-  serialized_pb=b'\n\x10management.proto\x12\x04grpc\x1a\x1egoogle/protobuf/wrappers.proto\">\n\x11JanusGraphContext\x12\x11\n\tgraphName\x18\x01 \x01(\t\x12\x16\n\x0estorageBackend\x18\x02 \x01(\t\",\n\x1cGetContextByGraphNameRequest\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x14\n\x12GetContextsRequest\"\x99\x01\n\x0eVertexProperty\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\x08\x64\x61taType\x18\x03 \x01(\x0e\x32\x16.grpc.PropertyDataType\x12&\n\x0b\x63\x61rdinality\x18\x04 \x01(\x0e\x32\x11.grpc.Cardinality\"\x96\x01\n\x0bPropertyKey\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\x08\x64\x61taType\x18\x03 \x01(\x0e\x32\x16.grpc.PropertyDataType\x12&\n\x0b\x63\x61rdinality\x18\x04 \x01(\x0e\x32\x11.grpc.Cardinality\"\x95\x01\n\x0bVertexLabel\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\nproperties\x18\x03 \x03(\x0b\x32\x14.grpc.VertexProperty\x12\x10\n\x08readOnly\x18\x04 \x01(\x08\x12\x13\n\x0bpartitioned\x18\x05 \x01(\x08\"V\n\x1cGetVertexLabelsByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x0c\n\x04name\x18\x02 \x01(\t\"f\n\x18\x45nsureVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12 \n\x05label\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\"B\n\x16GetVertexLabelsRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"o\n\x0c\x45\x64geProperty\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\x08\x64\x61taType\x18\x03 \x01(\x0e\x32\x16.grpc.PropertyDataType\"\x9c\x03\n\tEdgeLabel\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12&\n\nproperties\x18\x03 \x03(\x0b\x32\x12.grpc.EdgeProperty\x12*\n\x08\x64irected\x18\x04 \x01(\x0e\x32\x18.grpc.EdgeLabel.Directed\x12,\n\tdirection\x18\x05 \x01(\x0e\x32\x19.grpc.EdgeLabel.Direction\x12\x32\n\x0cmultiplicity\x18\x06 \x01(\x0e\x32\x1c.grpc.EdgeLabel.Multiplicity\"2\n\x08\x44irected\x12\x11\n\rdirected_edge\x10\x00\x12\x13\n\x0fundirected_edge\x10\x01\"\x1e\n\tDirection\x12\x08\n\x04\x42OTH\x10\x00\x12\x07\n\x03OUT\x10\x01\"N\n\x0cMultiplicity\x12\t\n\x05Multi\x10\x00\x12\n\n\x06Simple\x10\x01\x12\x0c\n\x08One2Many\x10\x02\x12\x0c\n\x08Many2One\x10\x03\x12\x0b\n\x07One2One\x10\x04\"T\n\x1aGetEdgeLabelsByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x0c\n\x04name\x18\x02 \x01(\t\"b\n\x16\x45nsureEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x1e\n\x05label\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\"@\n\x14GetEdgeLabelsRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"i\n\x18\x45nsurePropertyKeyRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12#\n\x08property\x18\x02 \x01(\x0b\x32\x11.grpc.PropertyKey\"\x9c\x01\n&EnsurePropertyKeyForVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x08property\x18\x02 \x01(\x0b\x32\x14.grpc.VertexProperty\x12 \n\x05label\x18\x03 \x01(\x0b\x32\x11.grpc.VertexLabel\"\x96\x01\n$EnsurePropertyKeyForEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12$\n\x08property\x18\x02 \x01(\x0b\x32\x12.grpc.EdgeProperty\x12\x1e\n\x05label\x18\x03 \x01(\x0b\x32\x0f.grpc.EdgeLabel\"\x80\x01\n EnsurePropertyKeyForLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12#\n\x08property\x18\x02 \x01(\x0b\x32\x11.grpc.PropertyKey\x12\r\n\x05label\x18\x03 \x01(\t\"H\n\x1cGetVertexPropertyKeysRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"F\n\x1aGetEdgePropertyKeysRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"B\n\x16GetPropertyKeysRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"U\n\x1bGetPropertyKeyByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x0c\n\x04name\x18\x02 \x01(\t\"\xa6\x01\n\x14\x43ompositeVertexIndex\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\nproperties\x18\x03 \x03(\x0b\x32\x14.grpc.VertexProperty\x12\x0e\n\x06unique\x18\x04 \x01(\x08\x12\r\n\x05label\x18\x05 \x01(\t\x12\x0e\n\x06status\x18\x06 \x01(\t\"{\n\'GetCompositeIndicesByVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x0bvertexLabel\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\"_\n GetCompositeIndicesByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x11\n\tindexName\x18\x02 \x01(\t\"O\n#GetCompositeIndicesForVertexRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"M\n!GetCompositeIndicesForEdgeRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"\xa7\x01\n(EnsureCompositeIndexByVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x0bvertexLabel\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\x12)\n\x05index\x18\x03 \x01(\x0b\x32\x1a.grpc.CompositeVertexIndex\"}\n&EnsureCompositeIndexForVerticesRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12)\n\x05index\x18\x02 \x01(\x0b\x32\x1a.grpc.CompositeVertexIndex\"\x84\x01\n\x10MixedVertexIndex\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\nproperties\x18\x03 \x03(\x0b\x32\x14.grpc.VertexProperty\x12\x0f\n\x07\x62\x61\x63kend\x18\x05 \x01(\t\"w\n#GetMixedIndicesByVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x0bvertexLabel\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\"\x9f\x01\n$EnsureMixedIndexByVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x0bvertexLabel\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\x12%\n\x05index\x18\x03 \x01(\x0b\x32\x16.grpc.MixedVertexIndex\"\x92\x01\n\x12\x43ompositeEdgeIndex\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12&\n\nproperties\x18\x03 \x03(\x0b\x32\x12.grpc.EdgeProperty\x12\r\n\x05label\x18\x04 \x01(\t\x12\x0e\n\x06status\x18\x05 \x01(\t\"u\n%GetCompositeIndicesByEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\"\n\tedgeLabel\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\"\x9f\x01\n&EnsureCompositeIndexByEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\"\n\tedgeLabel\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\x12\'\n\x05index\x18\x03 \x01(\x0b\x32\x18.grpc.CompositeEdgeIndex\"x\n#EnsureCompositeIndexForEdgesRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\'\n\x05index\x18\x02 \x01(\x0b\x32\x18.grpc.CompositeEdgeIndex\"~\n\'EnableVertexCompositeIndexByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12)\n\x05index\x18\x02 \x01(\x0b\x32\x1a.grpc.CompositeVertexIndex\"z\n%EnableEdgeCompositeIndexByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\'\n\x05index\x18\x02 \x01(\x0b\x32\x18.grpc.CompositeEdgeIndex\"\x80\x01\n\x0eMixedEdgeIndex\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12&\n\nproperties\x18\x03 \x03(\x0b\x32\x12.grpc.EdgeProperty\x12\x0f\n\x07\x62\x61\x63kend\x18\x05 \x01(\t\"q\n!GetMixedIndicesByEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\"\n\tedgeLabel\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\"\x97\x01\n\"EnsureMixedIndexByEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\"\n\tedgeLabel\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\x12#\n\x05index\x18\x03 \x01(\x0b\x32\x14.grpc.MixedEdgeIndex*\xb1\x01\n\x10PropertyDataType\x12\n\n\x06String\x10\x00\x12\r\n\tCharacter\x10\x01\x12\x0b\n\x07\x42oolean\x10\x02\x12\x08\n\x04Int8\x10\x03\x12\t\n\x05Int16\x10\x04\x12\t\n\x05Int32\x10\x05\x12\t\n\x05Int64\x10\x06\x12\x0b\n\x07\x46loat32\x10\x07\x12\x0b\n\x07\x46loat64\x10\x08\x12\x08\n\x04\x44\x61te\x10\t\x12\x0e\n\nJavaObject\x10\n\x12\x0c\n\x08GeoShape\x10\x0b\x12\x08\n\x04Uuid\x10\x0c*,\n\x0b\x43\x61rdinality\x12\n\n\x06Single\x10\x00\x12\x08\n\x04List\x10\x01\x12\x07\n\x03Set\x10\x02\x32\xa9\x01\n\rAccessContext\x12\x42\n\x0bGetContexts\x12\x18.grpc.GetContextsRequest\x1a\x17.grpc.JanusGraphContext0\x01\x12T\n\x15GetContextByGraphName\x12\".grpc.GetContextByGraphNameRequest\x1a\x17.grpc.JanusGraphContext2\xf7\x01\n\x19ManagementForPropertyKeys\x12\x44\n\x0fGetPropertyKeys\x12\x1c.grpc.GetPropertyKeysRequest\x1a\x11.grpc.PropertyKey0\x01\x12L\n\x14GetPropertyKeyByName\x12!.grpc.GetPropertyKeyByNameRequest\x1a\x11.grpc.PropertyKey\x12\x46\n\x11\x45nsurePropertyKey\x12\x1e.grpc.EnsurePropertyKeyRequest\x1a\x11.grpc.PropertyKey2\x86\x08\n\x17ManagementForEdgeLabels\x12>\n\rGetEdgeLabels\x12\x1a.grpc.GetEdgeLabelsRequest\x1a\x0f.grpc.EdgeLabel0\x01\x12J\n\x13GetEdgeLabelsByName\x12 .grpc.GetEdgeLabelsByNameRequest\x1a\x0f.grpc.EdgeLabel0\x01\x12@\n\x0f\x45nsureEdgeLabel\x12\x1c.grpc.EnsureEdgeLabelRequest\x1a\x0f.grpc.EdgeLabel\x12i\n\x1eGetCompositeIndicesByEdgeLabel\x12+.grpc.GetCompositeIndicesByEdgeLabelRequest\x1a\x18.grpc.CompositeEdgeIndex0\x01\x12_\n\x1bGetEdgeCompositeIndexByName\x12&.grpc.GetCompositeIndicesByNameRequest\x1a\x18.grpc.CompositeEdgeIndex\x12i\n\x1f\x45nsureCompositeIndexByEdgeLabel\x12,.grpc.EnsureCompositeIndexByEdgeLabelRequest\x1a\x18.grpc.CompositeEdgeIndex\x12\x61\n\x1aGetCompositeIndicesForEdge\x12\'.grpc.GetCompositeIndicesForEdgeRequest\x1a\x18.grpc.CompositeEdgeIndex0\x01\x12\x62\n\x1b\x45nsureCompositeIndexForEdge\x12).grpc.EnsureCompositeIndexForEdgesRequest\x1a\x18.grpc.CompositeEdgeIndex\x12\x61\n\x18\x45nableEdgeCompositeIndex\x12+.grpc.EnableEdgeCompositeIndexByNameRequest\x1a\x18.grpc.CompositeEdgeIndex\x12]\n\x1aGetMixedIndicesByEdgeLabel\x12\'.grpc.GetMixedIndicesByEdgeLabelRequest\x1a\x14.grpc.MixedEdgeIndex0\x01\x12]\n\x1b\x45nsureMixedIndexByEdgeLabel\x12(.grpc.EnsureMixedIndexByEdgeLabelRequest\x1a\x14.grpc.MixedEdgeIndex2\xc9\x08\n\x19ManagementForVertexLabels\x12\x44\n\x0fGetVertexLabels\x12\x1c.grpc.GetVertexLabelsRequest\x1a\x11.grpc.VertexLabel0\x01\x12P\n\x15GetVertexLabelsByName\x12\".grpc.GetVertexLabelsByNameRequest\x1a\x11.grpc.VertexLabel0\x01\x12\x46\n\x11\x45nsureVertexLabel\x12\x1e.grpc.EnsureVertexLabelRequest\x1a\x11.grpc.VertexLabel\x12o\n GetCompositeIndicesByVertexLabel\x12-.grpc.GetCompositeIndicesByVertexLabelRequest\x1a\x1a.grpc.CompositeVertexIndex0\x01\x12\x63\n\x1dGetVertexCompositeIndexByName\x12&.grpc.GetCompositeIndicesByNameRequest\x1a\x1a.grpc.CompositeVertexIndex\x12o\n!EnsureCompositeIndexByVertexLabel\x12..grpc.EnsureCompositeIndexByVertexLabelRequest\x1a\x1a.grpc.CompositeVertexIndex\x12g\n\x1cGetCompositeIndicesForVertex\x12).grpc.GetCompositeIndicesForVertexRequest\x1a\x1a.grpc.CompositeVertexIndex0\x01\x12i\n\x1d\x45nsureCompositeIndexForVertex\x12,.grpc.EnsureCompositeIndexForVerticesRequest\x1a\x1a.grpc.CompositeVertexIndex\x12g\n\x1a\x45nableVertexCompositeIndex\x12-.grpc.EnableVertexCompositeIndexByNameRequest\x1a\x1a.grpc.CompositeVertexIndex\x12\x63\n\x1cGetMixedIndicesByVertexLabel\x12).grpc.GetMixedIndicesByVertexLabelRequest\x1a\x16.grpc.MixedVertexIndex0\x01\x12\x63\n\x1d\x45nsureMixedIndexByVertexLabel\x12*.grpc.EnsureMixedIndexByVertexLabelRequest\x1a\x16.grpc.MixedVertexIndexB(\n\x13org.janusgraph.grpcB\x0fManagementProtoP\x01\x62\x06proto3'
+  serialized_pb=b'\n\x10management.proto\x12\x04grpc\x1a\x1egoogle/protobuf/wrappers.proto\">\n\x11JanusGraphContext\x12\x11\n\tgraphName\x18\x01 \x01(\t\x12\x16\n\x0estorageBackend\x18\x02 \x01(\t\",\n\x1cGetContextByGraphNameRequest\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x14\n\x12GetContextsRequest\"\x99\x01\n\x0eVertexProperty\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\x08\x64\x61taType\x18\x03 \x01(\x0e\x32\x16.grpc.PropertyDataType\x12&\n\x0b\x63\x61rdinality\x18\x04 \x01(\x0e\x32\x11.grpc.Cardinality\"\x96\x01\n\x0bPropertyKey\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\x08\x64\x61taType\x18\x03 \x01(\x0e\x32\x16.grpc.PropertyDataType\x12&\n\x0b\x63\x61rdinality\x18\x04 \x01(\x0e\x32\x11.grpc.Cardinality\"\x95\x01\n\x0bVertexLabel\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\nproperties\x18\x03 \x03(\x0b\x32\x14.grpc.VertexProperty\x12\x10\n\x08readOnly\x18\x04 \x01(\x08\x12\x13\n\x0bpartitioned\x18\x05 \x01(\x08\"V\n\x1cGetVertexLabelsByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x0c\n\x04name\x18\x02 \x01(\t\"f\n\x18\x45nsureVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12 \n\x05label\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\"B\n\x16GetVertexLabelsRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"o\n\x0c\x45\x64geProperty\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\x08\x64\x61taType\x18\x03 \x01(\x0e\x32\x16.grpc.PropertyDataType\"\x9c\x03\n\tEdgeLabel\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12&\n\nproperties\x18\x03 \x03(\x0b\x32\x12.grpc.EdgeProperty\x12*\n\x08\x64irected\x18\x04 \x01(\x0e\x32\x18.grpc.EdgeLabel.Directed\x12,\n\tdirection\x18\x05 \x01(\x0e\x32\x19.grpc.EdgeLabel.Direction\x12\x32\n\x0cmultiplicity\x18\x06 \x01(\x0e\x32\x1c.grpc.EdgeLabel.Multiplicity\"2\n\x08\x44irected\x12\x11\n\rdirected_edge\x10\x00\x12\x13\n\x0fundirected_edge\x10\x01\"\x1e\n\tDirection\x12\x08\n\x04\x42OTH\x10\x00\x12\x07\n\x03OUT\x10\x01\"N\n\x0cMultiplicity\x12\t\n\x05Multi\x10\x00\x12\n\n\x06Simple\x10\x01\x12\x0c\n\x08One2Many\x10\x02\x12\x0c\n\x08Many2One\x10\x03\x12\x0b\n\x07One2One\x10\x04\"T\n\x1aGetEdgeLabelsByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x0c\n\x04name\x18\x02 \x01(\t\"b\n\x16\x45nsureEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x1e\n\x05label\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\"@\n\x14GetEdgeLabelsRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"i\n\x18\x45nsurePropertyKeyRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12#\n\x08property\x18\x02 \x01(\x0b\x32\x11.grpc.PropertyKey\"\x9c\x01\n&EnsurePropertyKeyForVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x08property\x18\x02 \x01(\x0b\x32\x14.grpc.VertexProperty\x12 \n\x05label\x18\x03 \x01(\x0b\x32\x11.grpc.VertexLabel\"\x96\x01\n$EnsurePropertyKeyForEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12$\n\x08property\x18\x02 \x01(\x0b\x32\x12.grpc.EdgeProperty\x12\x1e\n\x05label\x18\x03 \x01(\x0b\x32\x0f.grpc.EdgeLabel\"\x80\x01\n EnsurePropertyKeyForLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12#\n\x08property\x18\x02 \x01(\x0b\x32\x11.grpc.PropertyKey\x12\r\n\x05label\x18\x03 \x01(\t\"H\n\x1cGetVertexPropertyKeysRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"F\n\x1aGetEdgePropertyKeysRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"B\n\x16GetPropertyKeysRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"U\n\x1bGetPropertyKeyByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x0c\n\x04name\x18\x02 \x01(\t\"\xa6\x01\n\x14\x43ompositeVertexIndex\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\nproperties\x18\x03 \x03(\x0b\x32\x14.grpc.VertexProperty\x12\x0e\n\x06unique\x18\x04 \x01(\x08\x12\r\n\x05label\x18\x05 \x01(\t\x12\x0e\n\x06status\x18\x06 \x01(\t\"{\n\'GetCompositeIndicesByVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x0bvertexLabel\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\"_\n GetCompositeIndicesByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\x11\n\tindexName\x18\x02 \x01(\t\"O\n#GetCompositeIndicesForVertexRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"M\n!GetCompositeIndicesForEdgeRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\"\xa7\x01\n(EnsureCompositeIndexByVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x0bvertexLabel\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\x12)\n\x05index\x18\x03 \x01(\x0b\x32\x1a.grpc.CompositeVertexIndex\"}\n&EnsureCompositeIndexForVerticesRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12)\n\x05index\x18\x02 \x01(\x0b\x32\x1a.grpc.CompositeVertexIndex\"\x84\x01\n\x10MixedVertexIndex\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12(\n\nproperties\x18\x03 \x03(\x0b\x32\x14.grpc.VertexProperty\x12\x0f\n\x07\x62\x61\x63kend\x18\x05 \x01(\t\"w\n#GetMixedIndicesByVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x0bvertexLabel\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\"\x9f\x01\n$EnsureMixedIndexByVertexLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12&\n\x0bvertexLabel\x18\x02 \x01(\x0b\x32\x11.grpc.VertexLabel\x12%\n\x05index\x18\x03 \x01(\x0b\x32\x16.grpc.MixedVertexIndex\"\xa2\x01\n\x12\x43ompositeEdgeIndex\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12&\n\nproperties\x18\x03 \x03(\x0b\x32\x12.grpc.EdgeProperty\x12\r\n\x05label\x18\x04 \x01(\t\x12\x0e\n\x06unique\x18\x05 \x01(\x08\x12\x0e\n\x06status\x18\x06 \x01(\t\"u\n%GetCompositeIndicesByEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\"\n\tedgeLabel\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\"\x9f\x01\n&EnsureCompositeIndexByEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\"\n\tedgeLabel\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\x12\'\n\x05index\x18\x03 \x01(\x0b\x32\x18.grpc.CompositeEdgeIndex\"x\n#EnsureCompositeIndexForEdgesRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\'\n\x05index\x18\x02 \x01(\x0b\x32\x18.grpc.CompositeEdgeIndex\"~\n\'EnableVertexCompositeIndexByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12)\n\x05index\x18\x02 \x01(\x0b\x32\x1a.grpc.CompositeVertexIndex\"z\n%EnableEdgeCompositeIndexByNameRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\'\n\x05index\x18\x02 \x01(\x0b\x32\x18.grpc.CompositeEdgeIndex\"\x80\x01\n\x0eMixedEdgeIndex\x12\'\n\x02id\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x0c\n\x04name\x18\x02 \x01(\t\x12&\n\nproperties\x18\x03 \x03(\x0b\x32\x12.grpc.EdgeProperty\x12\x0f\n\x07\x62\x61\x63kend\x18\x05 \x01(\t\"q\n!GetMixedIndicesByEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\"\n\tedgeLabel\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\"\x97\x01\n\"EnsureMixedIndexByEdgeLabelRequest\x12(\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x17.grpc.JanusGraphContext\x12\"\n\tedgeLabel\x18\x02 \x01(\x0b\x32\x0f.grpc.EdgeLabel\x12#\n\x05index\x18\x03 \x01(\x0b\x32\x14.grpc.MixedEdgeIndex*\xb1\x01\n\x10PropertyDataType\x12\n\n\x06String\x10\x00\x12\r\n\tCharacter\x10\x01\x12\x0b\n\x07\x42oolean\x10\x02\x12\x08\n\x04Int8\x10\x03\x12\t\n\x05Int16\x10\x04\x12\t\n\x05Int32\x10\x05\x12\t\n\x05Int64\x10\x06\x12\x0b\n\x07\x46loat32\x10\x07\x12\x0b\n\x07\x46loat64\x10\x08\x12\x08\n\x04\x44\x61te\x10\t\x12\x0e\n\nJavaObject\x10\n\x12\x0c\n\x08GeoShape\x10\x0b\x12\x08\n\x04Uuid\x10\x0c*,\n\x0b\x43\x61rdinality\x12\n\n\x06Single\x10\x00\x12\x08\n\x04List\x10\x01\x12\x07\n\x03Set\x10\x02\x32\xa9\x01\n\rAccessContext\x12\x42\n\x0bGetContexts\x12\x18.grpc.GetContextsRequest\x1a\x17.grpc.JanusGraphContext0\x01\x12T\n\x15GetContextByGraphName\x12\".grpc.GetContextByGraphNameRequest\x1a\x17.grpc.JanusGraphContext2\xf7\x01\n\x19ManagementForPropertyKeys\x12\x44\n\x0fGetPropertyKeys\x12\x1c.grpc.GetPropertyKeysRequest\x1a\x11.grpc.PropertyKey0\x01\x12L\n\x14GetPropertyKeyByName\x12!.grpc.GetPropertyKeyByNameRequest\x1a\x11.grpc.PropertyKey\x12\x46\n\x11\x45nsurePropertyKey\x12\x1e.grpc.EnsurePropertyKeyRequest\x1a\x11.grpc.PropertyKey2\x86\x08\n\x17ManagementForEdgeLabels\x12>\n\rGetEdgeLabels\x12\x1a.grpc.GetEdgeLabelsRequest\x1a\x0f.grpc.EdgeLabel0\x01\x12J\n\x13GetEdgeLabelsByName\x12 .grpc.GetEdgeLabelsByNameRequest\x1a\x0f.grpc.EdgeLabel0\x01\x12@\n\x0f\x45nsureEdgeLabel\x12\x1c.grpc.EnsureEdgeLabelRequest\x1a\x0f.grpc.EdgeLabel\x12\x61\n\x1aGetCompositeIndicesForEdge\x12\'.grpc.GetCompositeIndicesForEdgeRequest\x1a\x18.grpc.CompositeEdgeIndex0\x01\x12i\n\x1eGetCompositeIndicesByEdgeLabel\x12+.grpc.GetCompositeIndicesByEdgeLabelRequest\x1a\x18.grpc.CompositeEdgeIndex0\x01\x12_\n\x1bGetEdgeCompositeIndexByName\x12&.grpc.GetCompositeIndicesByNameRequest\x1a\x18.grpc.CompositeEdgeIndex\x12i\n\x1f\x45nsureCompositeIndexByEdgeLabel\x12,.grpc.EnsureCompositeIndexByEdgeLabelRequest\x1a\x18.grpc.CompositeEdgeIndex\x12\x62\n\x1b\x45nsureCompositeIndexForEdge\x12).grpc.EnsureCompositeIndexForEdgesRequest\x1a\x18.grpc.CompositeEdgeIndex\x12\x61\n\x18\x45nableEdgeCompositeIndex\x12+.grpc.EnableEdgeCompositeIndexByNameRequest\x1a\x18.grpc.CompositeEdgeIndex\x12]\n\x1aGetMixedIndicesByEdgeLabel\x12\'.grpc.GetMixedIndicesByEdgeLabelRequest\x1a\x14.grpc.MixedEdgeIndex0\x01\x12]\n\x1b\x45nsureMixedIndexByEdgeLabel\x12(.grpc.EnsureMixedIndexByEdgeLabelRequest\x1a\x14.grpc.MixedEdgeIndex2\xc9\x08\n\x19ManagementForVertexLabels\x12\x44\n\x0fGetVertexLabels\x12\x1c.grpc.GetVertexLabelsRequest\x1a\x11.grpc.VertexLabel0\x01\x12P\n\x15GetVertexLabelsByName\x12\".grpc.GetVertexLabelsByNameRequest\x1a\x11.grpc.VertexLabel0\x01\x12\x46\n\x11\x45nsureVertexLabel\x12\x1e.grpc.EnsureVertexLabelRequest\x1a\x11.grpc.VertexLabel\x12o\n GetCompositeIndicesByVertexLabel\x12-.grpc.GetCompositeIndicesByVertexLabelRequest\x1a\x1a.grpc.CompositeVertexIndex0\x01\x12\x63\n\x1dGetVertexCompositeIndexByName\x12&.grpc.GetCompositeIndicesByNameRequest\x1a\x1a.grpc.CompositeVertexIndex\x12g\n\x1cGetCompositeIndicesForVertex\x12).grpc.GetCompositeIndicesForVertexRequest\x1a\x1a.grpc.CompositeVertexIndex0\x01\x12o\n!EnsureCompositeIndexByVertexLabel\x12..grpc.EnsureCompositeIndexByVertexLabelRequest\x1a\x1a.grpc.CompositeVertexIndex\x12i\n\x1d\x45nsureCompositeIndexForVertex\x12,.grpc.EnsureCompositeIndexForVerticesRequest\x1a\x1a.grpc.CompositeVertexIndex\x12g\n\x1a\x45nableVertexCompositeIndex\x12-.grpc.EnableVertexCompositeIndexByNameRequest\x1a\x1a.grpc.CompositeVertexIndex\x12\x63\n\x1cGetMixedIndicesByVertexLabel\x12).grpc.GetMixedIndicesByVertexLabelRequest\x1a\x16.grpc.MixedVertexIndex0\x01\x12\x63\n\x1d\x45nsureMixedIndexByVertexLabel\x12*.grpc.EnsureMixedIndexByVertexLabelRequest\x1a\x16.grpc.MixedVertexIndexB(\n\x13org.janusgraph.grpcB\x0fManagementProtoP\x01\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -85,8 +85,8 @@ _PROPERTYDATATYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5013,
-  serialized_end=5190,
+  serialized_start=5029,
+  serialized_end=5206,
 )
 _sym_db.RegisterEnumDescriptor(_PROPERTYDATATYPE)
 
@@ -112,8 +112,8 @@ _CARDINALITY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5192,
-  serialized_end=5236,
+  serialized_start=5208,
+  serialized_end=5252,
 )
 _sym_db.RegisterEnumDescriptor(_CARDINALITY)
 
@@ -1561,8 +1561,15 @@ _COMPOSITEEDGEINDEX = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='status', full_name='grpc.CompositeEdgeIndex.status', index=4,
-      number=5, type=9, cpp_type=9, label=1,
+      name='unique', full_name='grpc.CompositeEdgeIndex.unique', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='grpc.CompositeEdgeIndex.status', index=5,
+      number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1580,7 +1587,7 @@ _COMPOSITEEDGEINDEX = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=3809,
-  serialized_end=3955,
+  serialized_end=3971,
 )
 
 
@@ -1617,8 +1624,8 @@ _GETCOMPOSITEINDICESBYEDGELABELREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3957,
-  serialized_end=4074,
+  serialized_start=3973,
+  serialized_end=4090,
 )
 
 
@@ -1662,8 +1669,8 @@ _ENSURECOMPOSITEINDEXBYEDGELABELREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4077,
-  serialized_end=4236,
+  serialized_start=4093,
+  serialized_end=4252,
 )
 
 
@@ -1700,8 +1707,8 @@ _ENSURECOMPOSITEINDEXFOREDGESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4238,
-  serialized_end=4358,
+  serialized_start=4254,
+  serialized_end=4374,
 )
 
 
@@ -1738,8 +1745,8 @@ _ENABLEVERTEXCOMPOSITEINDEXBYNAMEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4360,
-  serialized_end=4486,
+  serialized_start=4376,
+  serialized_end=4502,
 )
 
 
@@ -1776,8 +1783,8 @@ _ENABLEEDGECOMPOSITEINDEXBYNAMEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4488,
-  serialized_end=4610,
+  serialized_start=4504,
+  serialized_end=4626,
 )
 
 
@@ -1828,8 +1835,8 @@ _MIXEDEDGEINDEX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4613,
-  serialized_end=4741,
+  serialized_start=4629,
+  serialized_end=4757,
 )
 
 
@@ -1866,8 +1873,8 @@ _GETMIXEDINDICESBYEDGELABELREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4743,
-  serialized_end=4856,
+  serialized_start=4759,
+  serialized_end=4872,
 )
 
 
@@ -1911,8 +1918,8 @@ _ENSUREMIXEDINDEXBYEDGELABELREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4859,
-  serialized_end=5010,
+  serialized_start=4875,
+  serialized_end=5026,
 )
 
 _VERTEXPROPERTY.fields_by_name['id'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
@@ -2335,8 +2342,8 @@ _ACCESSCONTEXT = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=5239,
-  serialized_end=5408,
+  serialized_start=5255,
+  serialized_end=5424,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetContexts',
@@ -2368,8 +2375,8 @@ _MANAGEMENTFORPROPERTYKEYS = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   serialized_options=None,
-  serialized_start=5411,
-  serialized_end=5658,
+  serialized_start=5427,
+  serialized_end=5674,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetPropertyKeys',
@@ -2410,8 +2417,8 @@ _MANAGEMENTFOREDGELABELS = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=2,
   serialized_options=None,
-  serialized_start=5661,
-  serialized_end=6691,
+  serialized_start=5677,
+  serialized_end=6707,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetEdgeLabels',
@@ -2441,9 +2448,18 @@ _MANAGEMENTFOREDGELABELS = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
+    name='GetCompositeIndicesForEdge',
+    full_name='grpc.ManagementForEdgeLabels.GetCompositeIndicesForEdge',
+    index=3,
+    containing_service=None,
+    input_type=_GETCOMPOSITEINDICESFOREDGEREQUEST,
+    output_type=_COMPOSITEEDGEINDEX,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
     name='GetCompositeIndicesByEdgeLabel',
     full_name='grpc.ManagementForEdgeLabels.GetCompositeIndicesByEdgeLabel',
-    index=3,
+    index=4,
     containing_service=None,
     input_type=_GETCOMPOSITEINDICESBYEDGELABELREQUEST,
     output_type=_COMPOSITEEDGEINDEX,
@@ -2452,7 +2468,7 @@ _MANAGEMENTFOREDGELABELS = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='GetEdgeCompositeIndexByName',
     full_name='grpc.ManagementForEdgeLabels.GetEdgeCompositeIndexByName',
-    index=4,
+    index=5,
     containing_service=None,
     input_type=_GETCOMPOSITEINDICESBYNAMEREQUEST,
     output_type=_COMPOSITEEDGEINDEX,
@@ -2461,18 +2477,9 @@ _MANAGEMENTFOREDGELABELS = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='EnsureCompositeIndexByEdgeLabel',
     full_name='grpc.ManagementForEdgeLabels.EnsureCompositeIndexByEdgeLabel',
-    index=5,
-    containing_service=None,
-    input_type=_ENSURECOMPOSITEINDEXBYEDGELABELREQUEST,
-    output_type=_COMPOSITEEDGEINDEX,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='GetCompositeIndicesForEdge',
-    full_name='grpc.ManagementForEdgeLabels.GetCompositeIndicesForEdge',
     index=6,
     containing_service=None,
-    input_type=_GETCOMPOSITEINDICESFOREDGEREQUEST,
+    input_type=_ENSURECOMPOSITEINDEXBYEDGELABELREQUEST,
     output_type=_COMPOSITEEDGEINDEX,
     serialized_options=None,
   ),
@@ -2524,8 +2531,8 @@ _MANAGEMENTFORVERTEXLABELS = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=3,
   serialized_options=None,
-  serialized_start=6694,
-  serialized_end=7791,
+  serialized_start=6710,
+  serialized_end=7807,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetVertexLabels',
@@ -2573,20 +2580,20 @@ _MANAGEMENTFORVERTEXLABELS = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='EnsureCompositeIndexByVertexLabel',
-    full_name='grpc.ManagementForVertexLabels.EnsureCompositeIndexByVertexLabel',
+    name='GetCompositeIndicesForVertex',
+    full_name='grpc.ManagementForVertexLabels.GetCompositeIndicesForVertex',
     index=5,
     containing_service=None,
-    input_type=_ENSURECOMPOSITEINDEXBYVERTEXLABELREQUEST,
+    input_type=_GETCOMPOSITEINDICESFORVERTEXREQUEST,
     output_type=_COMPOSITEVERTEXINDEX,
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='GetCompositeIndicesForVertex',
-    full_name='grpc.ManagementForVertexLabels.GetCompositeIndicesForVertex',
+    name='EnsureCompositeIndexByVertexLabel',
+    full_name='grpc.ManagementForVertexLabels.EnsureCompositeIndexByVertexLabel',
     index=6,
     containing_service=None,
-    input_type=_GETCOMPOSITEINDICESFORVERTEXREQUEST,
+    input_type=_ENSURECOMPOSITEINDEXBYVERTEXLABELREQUEST,
     output_type=_COMPOSITEVERTEXINDEX,
     serialized_options=None,
   ),

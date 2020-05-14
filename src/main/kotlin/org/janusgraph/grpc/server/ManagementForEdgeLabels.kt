@@ -117,6 +117,7 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
             .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
             .setLabel(requestLabel.name)
             .build()
+
         management.commit()
         return compositeIndex
     }
@@ -222,6 +223,7 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
 
         val compositeIndex = CompositeEdgeIndex.newBuilder()
             .setName(idx.name())
+            .setUnique(idx.isUnique)
             .addAllProperties(idx.fieldKeys.map { createEdgePropertyProto(it) })
             .setStatus(convertSchemaStatusToString(idx.getIndexStatus(idx.fieldKeys[0])))
             .setLabel(labelConstraint)
@@ -247,6 +249,7 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
         val compositeIndex = CompositeEdgeIndex.newBuilder()
             .setName(graphIndex.name())
             .addAllProperties(properties)
+            .setLabel("ALL")
             .setStatus(convertSchemaStatusToString(graphIndex.getIndexStatus(keys[0])))
             .build()
         management.commit()

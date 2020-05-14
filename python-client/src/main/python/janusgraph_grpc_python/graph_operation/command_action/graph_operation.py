@@ -30,7 +30,7 @@ class GraphOperation:
         return 'Command(%s, %s)' % (str(self.graph_element), self.element_name)
 
     def set_operation(self, op):
-        if op in ["GET", "PUT"]:
+        if op in ["GET", "PUT", "ENABLE"]:
             self.OPERATION = op
         else:
             raise NotImplementedError("Implemented only GET and PUT operation.")
@@ -68,10 +68,12 @@ class GraphOperation:
         if self.metadata.get_metadata() is not None:
             operator = self.metadata.get_operator()
 
-            operator.set_element(self.processor.get_element())
+            print(f"Operator is {operator} and metadata is {self.metadata.get_metadata()}")
 
+            operator.set_element(self.processor.get_element())
             if isinstance(operator, GraphIndexer):
                 operator.set_service(self.SERVICE)
+                operator.set_element_to_index(str(self.processor))
 
             self.processor.set_optional_operator(operator)
 

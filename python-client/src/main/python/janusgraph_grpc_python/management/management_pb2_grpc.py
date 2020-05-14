@@ -244,6 +244,11 @@ class ManagementForEdgeLabelsStub(object):
                 request_serializer=management__pb2.EnsureEdgeLabelRequest.SerializeToString,
                 response_deserializer=management__pb2.EdgeLabel.FromString,
                 )
+        self.GetCompositeIndicesForEdge = channel.unary_stream(
+                '/grpc.ManagementForEdgeLabels/GetCompositeIndicesForEdge',
+                request_serializer=management__pb2.GetCompositeIndicesForEdgeRequest.SerializeToString,
+                response_deserializer=management__pb2.CompositeEdgeIndex.FromString,
+                )
         self.GetCompositeIndicesByEdgeLabel = channel.unary_stream(
                 '/grpc.ManagementForEdgeLabels/GetCompositeIndicesByEdgeLabel',
                 request_serializer=management__pb2.GetCompositeIndicesByEdgeLabelRequest.SerializeToString,
@@ -257,11 +262,6 @@ class ManagementForEdgeLabelsStub(object):
         self.EnsureCompositeIndexByEdgeLabel = channel.unary_unary(
                 '/grpc.ManagementForEdgeLabels/EnsureCompositeIndexByEdgeLabel',
                 request_serializer=management__pb2.EnsureCompositeIndexByEdgeLabelRequest.SerializeToString,
-                response_deserializer=management__pb2.CompositeEdgeIndex.FromString,
-                )
-        self.GetCompositeIndicesForEdge = channel.unary_stream(
-                '/grpc.ManagementForEdgeLabels/GetCompositeIndicesForEdge',
-                request_serializer=management__pb2.GetCompositeIndicesForEdgeRequest.SerializeToString,
                 response_deserializer=management__pb2.CompositeEdgeIndex.FromString,
                 )
         self.EnsureCompositeIndexForEdge = channel.unary_unary(
@@ -307,6 +307,12 @@ class ManagementForEdgeLabelsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetCompositeIndicesForEdge(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def GetCompositeIndicesByEdgeLabel(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -320,12 +326,6 @@ class ManagementForEdgeLabelsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def EnsureCompositeIndexByEdgeLabel(self, request, context):
-        """Missing associated documentation comment in .proto file"""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetCompositeIndicesForEdge(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -373,6 +373,11 @@ def add_ManagementForEdgeLabelsServicer_to_server(servicer, server):
                     request_deserializer=management__pb2.EnsureEdgeLabelRequest.FromString,
                     response_serializer=management__pb2.EdgeLabel.SerializeToString,
             ),
+            'GetCompositeIndicesForEdge': grpc.unary_stream_rpc_method_handler(
+                    servicer.GetCompositeIndicesForEdge,
+                    request_deserializer=management__pb2.GetCompositeIndicesForEdgeRequest.FromString,
+                    response_serializer=management__pb2.CompositeEdgeIndex.SerializeToString,
+            ),
             'GetCompositeIndicesByEdgeLabel': grpc.unary_stream_rpc_method_handler(
                     servicer.GetCompositeIndicesByEdgeLabel,
                     request_deserializer=management__pb2.GetCompositeIndicesByEdgeLabelRequest.FromString,
@@ -386,11 +391,6 @@ def add_ManagementForEdgeLabelsServicer_to_server(servicer, server):
             'EnsureCompositeIndexByEdgeLabel': grpc.unary_unary_rpc_method_handler(
                     servicer.EnsureCompositeIndexByEdgeLabel,
                     request_deserializer=management__pb2.EnsureCompositeIndexByEdgeLabelRequest.FromString,
-                    response_serializer=management__pb2.CompositeEdgeIndex.SerializeToString,
-            ),
-            'GetCompositeIndicesForEdge': grpc.unary_stream_rpc_method_handler(
-                    servicer.GetCompositeIndicesForEdge,
-                    request_deserializer=management__pb2.GetCompositeIndicesForEdgeRequest.FromString,
                     response_serializer=management__pb2.CompositeEdgeIndex.SerializeToString,
             ),
             'EnsureCompositeIndexForEdge': grpc.unary_unary_rpc_method_handler(
@@ -472,6 +472,22 @@ class ManagementForEdgeLabels(object):
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def GetCompositeIndicesForEdge(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/grpc.ManagementForEdgeLabels/GetCompositeIndicesForEdge',
+            management__pb2.GetCompositeIndicesForEdgeRequest.SerializeToString,
+            management__pb2.CompositeEdgeIndex.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def GetCompositeIndicesByEdgeLabel(request,
             target,
             options=(),
@@ -515,22 +531,6 @@ class ManagementForEdgeLabels(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/grpc.ManagementForEdgeLabels/EnsureCompositeIndexByEdgeLabel',
             management__pb2.EnsureCompositeIndexByEdgeLabelRequest.SerializeToString,
-            management__pb2.CompositeEdgeIndex.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def GetCompositeIndicesForEdge(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/grpc.ManagementForEdgeLabels/GetCompositeIndicesForEdge',
-            management__pb2.GetCompositeIndicesForEdgeRequest.SerializeToString,
             management__pb2.CompositeEdgeIndex.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -634,14 +634,14 @@ class ManagementForVertexLabelsStub(object):
                 request_serializer=management__pb2.GetCompositeIndicesByNameRequest.SerializeToString,
                 response_deserializer=management__pb2.CompositeVertexIndex.FromString,
                 )
-        self.EnsureCompositeIndexByVertexLabel = channel.unary_unary(
-                '/grpc.ManagementForVertexLabels/EnsureCompositeIndexByVertexLabel',
-                request_serializer=management__pb2.EnsureCompositeIndexByVertexLabelRequest.SerializeToString,
-                response_deserializer=management__pb2.CompositeVertexIndex.FromString,
-                )
         self.GetCompositeIndicesForVertex = channel.unary_stream(
                 '/grpc.ManagementForVertexLabels/GetCompositeIndicesForVertex',
                 request_serializer=management__pb2.GetCompositeIndicesForVertexRequest.SerializeToString,
+                response_deserializer=management__pb2.CompositeVertexIndex.FromString,
+                )
+        self.EnsureCompositeIndexByVertexLabel = channel.unary_unary(
+                '/grpc.ManagementForVertexLabels/EnsureCompositeIndexByVertexLabel',
+                request_serializer=management__pb2.EnsureCompositeIndexByVertexLabelRequest.SerializeToString,
                 response_deserializer=management__pb2.CompositeVertexIndex.FromString,
                 )
         self.EnsureCompositeIndexForVertex = channel.unary_unary(
@@ -699,13 +699,13 @@ class ManagementForVertexLabelsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def EnsureCompositeIndexByVertexLabel(self, request, context):
+    def GetCompositeIndicesForVertex(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetCompositeIndicesForVertex(self, request, context):
+    def EnsureCompositeIndexByVertexLabel(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -763,14 +763,14 @@ def add_ManagementForVertexLabelsServicer_to_server(servicer, server):
                     request_deserializer=management__pb2.GetCompositeIndicesByNameRequest.FromString,
                     response_serializer=management__pb2.CompositeVertexIndex.SerializeToString,
             ),
-            'EnsureCompositeIndexByVertexLabel': grpc.unary_unary_rpc_method_handler(
-                    servicer.EnsureCompositeIndexByVertexLabel,
-                    request_deserializer=management__pb2.EnsureCompositeIndexByVertexLabelRequest.FromString,
-                    response_serializer=management__pb2.CompositeVertexIndex.SerializeToString,
-            ),
             'GetCompositeIndicesForVertex': grpc.unary_stream_rpc_method_handler(
                     servicer.GetCompositeIndicesForVertex,
                     request_deserializer=management__pb2.GetCompositeIndicesForVertexRequest.FromString,
+                    response_serializer=management__pb2.CompositeVertexIndex.SerializeToString,
+            ),
+            'EnsureCompositeIndexByVertexLabel': grpc.unary_unary_rpc_method_handler(
+                    servicer.EnsureCompositeIndexByVertexLabel,
+                    request_deserializer=management__pb2.EnsureCompositeIndexByVertexLabelRequest.FromString,
                     response_serializer=management__pb2.CompositeVertexIndex.SerializeToString,
             ),
             'EnsureCompositeIndexForVertex': grpc.unary_unary_rpc_method_handler(
@@ -884,22 +884,6 @@ class ManagementForVertexLabels(object):
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def EnsureCompositeIndexByVertexLabel(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/grpc.ManagementForVertexLabels/EnsureCompositeIndexByVertexLabel',
-            management__pb2.EnsureCompositeIndexByVertexLabelRequest.SerializeToString,
-            management__pb2.CompositeVertexIndex.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
     def GetCompositeIndicesForVertex(request,
             target,
             options=(),
@@ -911,6 +895,22 @@ class ManagementForVertexLabels(object):
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/grpc.ManagementForVertexLabels/GetCompositeIndicesForVertex',
             management__pb2.GetCompositeIndicesForVertexRequest.SerializeToString,
+            management__pb2.CompositeVertexIndex.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def EnsureCompositeIndexByVertexLabel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/grpc.ManagementForVertexLabels/EnsureCompositeIndexByVertexLabel',
+            management__pb2.EnsureCompositeIndexByVertexLabelRequest.SerializeToString,
             management__pb2.CompositeVertexIndex.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)

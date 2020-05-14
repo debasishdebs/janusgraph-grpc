@@ -7,6 +7,7 @@ from janusgraph_grpc_python.structure.element.context_action import Contexts
 class GraphElementType:
 
     command_types = ["VertexLabel", "EdgeLabel", "ContextAction", "PropertyKey"]
+    element_type = None
 
     def __init__(self):
         self.VertexLabel = None
@@ -36,6 +37,8 @@ class GraphElementType:
 
     def set(self, instance):
         if instance in self.command_types:
+            self.element_type = instance
+
             if instance == "VertexLabel":
                 setattr(self, instance, Vertex)
             elif instance == "EdgeLabel":
@@ -49,3 +52,6 @@ class GraphElementType:
                                       "got " + instance)
 
         return self
+
+    def __str__(self):
+        return self.element_type

@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from janusgraph.management.element.vertex_label import VertexLabel
 from janusgraph.management.element.edge_label import EdgeLabel
 from janusgraph.management.element.property_key import PropertyKey
+from janusgraph.management.element.composite_index import CompositeIndex
 
 
 def is_custom_property_present(message, property_name):
@@ -41,6 +42,60 @@ def convert_response_to_python_property_key(response, element=None):
         properties.append(property_key)
 
     return properties
+
+
+def convert_response_to_python_composite_index(response, element_type):
+    indices = []
+
+    if isinstance(response, Iterable):
+        for resp in response:
+            index = CompositeIndex(resp.name)
+
+            index.set_id(resp.id)
+
+            index.set_element_type(element_type)
+
+            if is_custom_property_present(resp, "label"):
+                print("Response is ")
+                print(resp)
+                print("Label is " + resp.label)
+                index.set_label(resp.label)
+
+            if is_custom_property_present(resp, "unique"):
+                index.set_uniqueness(resp.unique)
+
+            if is_custom_property_present(resp, "status"):
+                index.set_index_status(resp.status)
+
+            if is_custom_property_present(resp, "properties"):
+                index.set_properties(resp.properties)
+
+            indices.append(index)
+    else:
+        index = CompositeIndex(response.name)
+
+        index.set_id(response.id)
+
+        index.set_element_type(element_type)
+
+        if is_custom_property_present(response, "label"):
+            print("Response is ")
+            print(response)
+            print("Label is " + response.label)
+            index.set_label(response.label)
+
+        if is_custom_property_present(response, "unique"):
+            index.set_uniqueness(response.unique)
+
+        if is_custom_property_present(response, "status"):
+            index.set_index_status(response.status)
+
+        if is_custom_property_present(response, "properties"):
+            index.set_properties(response.properties)
+
+        indices.append(index)
+
+    return indices
 
 
 def convert_response_to_python_vertex_label(response):

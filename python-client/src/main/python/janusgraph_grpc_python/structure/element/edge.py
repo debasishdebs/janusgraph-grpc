@@ -17,8 +17,8 @@ class Edge(GraphElement):
         self.OPTIONAL_OPERATOR = None
         self.OPTIONAL_METADATA = optional_metadata
 
-        if self.element_label is not "ALL":
-            self.ELEMENT = management_pb2.EdgeLabel(name=self.element_label)
+        # if self.element_label is not "ALL":
+        self.ELEMENT = management_pb2.EdgeLabel(name=self.element_label)
 
     def get_element(self):
         return self.ELEMENT
@@ -43,7 +43,7 @@ class Edge(GraphElement):
             if self.element_label is not "ALL":
                 self.REQUEST = management_pb2.EnsureEdgeLabelRequest(context=self.CONTEXT, label=self.ELEMENT)
             else:
-                raise NotImplementedError("Implemented PUT operation on VertexLabel when "
+                raise NotImplementedError("Implemented PUT operation on EdgeLabel when "
                                           "a vertexLabel name is provided not when ALL")
         return self
 
@@ -73,9 +73,14 @@ class Edge(GraphElement):
                                           "Because logically different")
 
     def __put__(self):
+        print("I'm inside put of " + str(self))
+        print("Element label is " + self.element_label)
+        print("Optional operator is " + str(self.OPTIONAL_OPERATOR))
+
         self.__generate_context__()
-        self.__generate_request__()
+
         if self.OPTIONAL_METADATA is None:
+            self.__generate_request__()
             return self.service.EnsureEdgeLabel(self.REQUEST)
 
         else:
@@ -83,12 +88,12 @@ class Edge(GraphElement):
                 self.OPTIONAL_OPERATOR.set_context(self.CONTEXT)
 
                 if self.element_label == "ALL":
-                    raise NotImplementedError("Not yet implemented PUT operation on index with ALL EdgeLabel. TODO")
-                    pass
+                    print("Not yet implemented PUT operation on index with ALL EdgeLabel. TODO")
+                    indexer = self.OPTIONAL_OPERATOR.get_indexer()
+                    return indexer.put_index_across_all_labels()
                 else:
                     indexer = self.OPTIONAL_OPERATOR.get_indexer()
-
-                    return indexer.put_index()
+                    return indexer.put_index_by_label()
 
             elif isinstance(self.OPTIONAL_OPERATOR, GraphElementAdder):
                 self.ELEMENT = self.OPTIONAL_OPERATOR.get_element()
@@ -101,3 +106,18 @@ class Edge(GraphElement):
 
             else:
                 raise ValueError("Invalid graph operator got. Expecting either of GraphIndexer of GraphElementAdder")
+
+    def __enable__(self):
+        # This is called only during Indexing operation to Enable an index
+        # Metadata will NOT BE NONE
+        # Additional Operator will be Indexer. element_label != ALL
+        self.__generate_context__()
+        self.OPTIONAL_OPERATOR.set_context(self.CONTEXT)
+
+        if self.element_label == "ALL":
+            print("ELEMENT_LABEL is ALL in enabling index. Ignoring it though")
+            indexer = self.OPTIONAL_OPERATOR.get_indexer()
+            return indexer.enable_index_by_name()
+
+        else:
+            raise NotImplementedError("Not Implemented enabling all indices specific to a label")

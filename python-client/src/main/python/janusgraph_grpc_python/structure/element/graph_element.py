@@ -28,14 +28,19 @@ class GraphElement(object):
             return self.__get__()
         elif self.operation == "PUT":
             return self.__put__()
+        elif self.operation == "ENABLE":
+            return self.__enable__()
         else:
-            raise NotImplementedError("Implemented only GET and PUT operations till now")
+            raise NotImplementedError("Implemented only GET, PUT and ENABLE operations till now")
 
     def __get__(self):
         pass
 
     def __put__(self):
         return
+
+    def __enable__(self):
+        raise NotImplementedError("Not subclassed enable() method yet from graph_element")
 
     def __str__(self):
         return self.element

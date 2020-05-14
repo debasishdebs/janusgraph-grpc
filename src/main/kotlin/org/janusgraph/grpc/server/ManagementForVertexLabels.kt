@@ -12,6 +12,7 @@ import org.janusgraph.graphdb.transaction.StandardJanusGraphTx
 import org.janusgraph.graphdb.types.CompositeIndexType
 import org.janusgraph.graphdb.types.MixedIndexType
 import org.janusgraph.grpc.*
+import java.time.temporal.TemporalUnit
 
 class ManagementForVertexLabels : IManagementForVertexLabels {
 
@@ -217,10 +218,13 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         val indexName = index.name
         val labelConstraint = index.label
 
-        ManagementSystem.awaitGraphIndexStatus(graph, indexName).call()
+        ManagementSystem.awaitGraphIndexStatus(graph, indexName).timeout(10, java.time.temporal.ChronoUnit.MINUTES).status(SchemaStatus.REGISTERED, SchemaStatus.ENABLED).call()
 
         val management = graph.openManagement()
         val idx = management.getGraphIndex(indexName)
+
+        println("Status of index" + idx.getIndexStatus(idx.fieldKeys[0]))
+
         if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.REGISTERED)
             management.updateIndex(idx, SchemaAction.ENABLE_INDEX)
         else if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.INSTALLED)
@@ -240,9 +244,19 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
     }
 
     override fun ensureCompositeIndexForVertex(
-        management: JanusGraphManagement,
+        graph: StandardJanusGraph,
         requestIndex: CompositeVertexIndex
     ): CompositeVertexIndex? {
+
+        graph.tx().rollback()
+
+        val management = graph.openManagement()
+
+        if (management.openInstances.size > 1) {
+            management.commit()
+            throw IllegalAccessException("There are multiple open management instances. " +
+                "Please close the stale transactions")
+        }
 
         val keys = requestIndex.propertiesList.map { management.getPropertyKey(it.name) }
         val builder = management.buildIndex(requestIndex.name, Vertex::class.java)
