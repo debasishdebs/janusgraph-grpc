@@ -56,9 +56,6 @@ def convert_response_to_python_composite_index(response, element_type):
             index.set_element_type(element_type)
 
             if is_custom_property_present(resp, "label"):
-                print("Response is ")
-                print(resp)
-                print("Label is " + resp.label)
                 index.set_label(resp.label)
 
             if is_custom_property_present(resp, "unique"):
@@ -79,9 +76,6 @@ def convert_response_to_python_composite_index(response, element_type):
         index.set_element_type(element_type)
 
         if is_custom_property_present(response, "label"):
-            print("Response is ")
-            print(response)
-            print("Label is " + response.label)
             index.set_label(response.label)
 
         if is_custom_property_present(response, "unique"):

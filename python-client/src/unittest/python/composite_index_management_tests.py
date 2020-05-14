@@ -27,13 +27,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(index.getConstrainedLabel(), "ALL")
         self.assertEqual(index.getName(), index_name)
         self.assertEqual(index.getElementType(), "VertexLabel")
-        print(len(index.getProperties()))
-        print(len(index_prop))
-        for p in index.getProperties():
-            print(p)
-        print(50*"-_")
-        for p in index_prop:
-            print(p)
+
         self.assertTrue(len(index.getProperties()) == len(index_prop))
         self.assertTrue(all(index.getProperties()[i].getName() == index_prop[i].getName()
                             for i in range(len(index_prop))))
@@ -151,9 +145,6 @@ class MyTestCase(unittest.TestCase):
 
         index = self.mgmt.buildCompositeIndex(index_name).onElement("Vertex").addKey(property_key).\
             indexOnly(constrained_label).unique().build()
-
-        print("Index created is ")
-        print(index)
 
         self.assertTrue(len(index) == len(label) == 1)
         index = index[0]
@@ -300,8 +291,6 @@ class MyTestCase(unittest.TestCase):
     def test_get_all_composite_index_for_vertex(self):
         indices = self.mgmt.getVertexCompositeIndex("ALL")
         self.assertEqual(len(indices), 7)
-        for i in indices:
-            print(i)
 
     def test_get_all_composite_index_for_edge(self):
         indices = self.mgmt.getEdgeCompositeIndex("ALL")

@@ -59,7 +59,7 @@ class VertexLabelMaker(SchemaMaker):
         self._check_if_valid_params_passed_()
 
         metadata = GraphOperationMetadata().set_dict("ADDER", self.METADATA)
-        print(metadata.get_metadata())
+
         operation = self.make_operation(self.ELEMENT, self.LABEL, metadata)
 
         operation.set_operation(self.OPERATION)

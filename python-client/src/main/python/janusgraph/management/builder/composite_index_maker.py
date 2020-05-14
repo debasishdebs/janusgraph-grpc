@@ -126,11 +126,6 @@ class CompositeIndexMaker(SchemaMaker):
 
         processor = operation.get_processor()
 
-        print("Got processor for Composite Index for " + self.LABEL)
-        print(processor)
-        print("Operating")
-        print("====END=====")
-
         index = convert_response_to_python_composite_index(processor.operate(), str(self.ELEMENT))
 
         if index[0].getStatus() == "INSTALLED":

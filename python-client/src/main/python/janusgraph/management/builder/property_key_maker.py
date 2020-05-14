@@ -137,7 +137,7 @@ class PropertyKeyMaker(SchemaMaker):
 
             for property_key in property_keys:
                 property_key.set_label(label)
-        print(property_keys)
+
         return property_keys
 
 
