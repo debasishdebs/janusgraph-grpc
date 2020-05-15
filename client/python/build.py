@@ -3,7 +3,7 @@ from pybuilder.core import use_plugin, init
 
 use_plugin("python.core")
 use_plugin("python.pycharm")
-use_plugin("python.unittest")
+# use_plugin("python.unittest")
 use_plugin("python.coverage")
 use_plugin("python.distutils")
 # this plugin allows installing project dependencies with pip
@@ -24,4 +24,6 @@ def set_properties(project):
     project.set_property("coverage_branch_partial_threshold_warn", 50)
     project.set_property("coverage_allow_non_imported_modules", False)  # default is True
     project.set_property("coverage_exceptions", ["__init__"])
+
+    project.depends_on("gremlinpython", "=={}".format("3.4.6"))
     pass
