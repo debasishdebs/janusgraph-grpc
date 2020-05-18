@@ -97,10 +97,24 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
     }
 
     override fun ensureCompositeIndexByVertexLabel(
-        management: JanusGraphManagement,
+        graph: StandardJanusGraph,
         requestLabel: VertexLabel,
         requestIndex: CompositeVertexIndex
     ): CompositeVertexIndex? {
+
+        graph.tx().rollback()
+
+        println("Rolled back transactions")
+
+        val management = graph.openManagement()
+        if (management.openInstances.size > 1) {
+            management.commit()
+            throw IllegalAccessException("There are multiple open management instances. " +
+                "Please close the stale transactions")
+        }
+
+        println("Creating index now")
+
         val label = getVertexLabel(management, requestLabel) ?: throw NullPointerException("vertex should exists")
 
         val keys = requestIndex.propertiesList.map { management.getPropertyKey(it.name) }
@@ -123,6 +137,9 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             .setLabel(requestLabel.name)
             .build()
         management.commit()
+
+        println("Created index " + graphIndex.name())
+
         return compositeVertexIndex
     }
 
@@ -218,12 +235,25 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
         val indexName = index.name
         val labelConstraint = index.label
 
-        ManagementSystem.awaitGraphIndexStatus(graph, indexName).timeout(10, java.time.temporal.ChronoUnit.MINUTES).status(SchemaStatus.REGISTERED, SchemaStatus.ENABLED).call()
+//        graph.tx().rollback()
+//        println("Rolled back transactions in enabling of index")
+//
+//        val mgmt = graph.openManagement()
+//        if (mgmt.openInstances.size > 1) {
+//            mgmt.commit()
+//            throw IllegalAccessException("There are multiple open management instances. " +
+//                "Please close the stale transactions")
+//        }
+
+        println("Awaiting to enable Vertex index now")
+
+        ManagementSystem.awaitGraphIndexStatus(graph, indexName).timeout(1,
+            java.time.temporal.ChronoUnit.MINUTES).status(SchemaStatus.REGISTERED, SchemaStatus.ENABLED).call()
 
         val management = graph.openManagement()
         val idx = management.getGraphIndex(indexName)
 
-        println("Status of index" + idx.getIndexStatus(idx.fieldKeys[0]))
+        println("Status of index" + idx.getIndexStatus(idx.fieldKeys[0]) + " for index " + idx.name())
 
         if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.REGISTERED)
             management.updateIndex(idx, SchemaAction.ENABLE_INDEX)
@@ -236,6 +266,7 @@ class ManagementForVertexLabels : IManagementForVertexLabels {
             .setName(idx.name())
             .addAllProperties(idx.fieldKeys.map { createVertexPropertyKeysProto(it) })
             .setStatus(convertSchemaStatusToString(idx.getIndexStatus(idx.fieldKeys[0])))
+            .setUnique(idx.isUnique)
             .setLabel(labelConstraint)
             .build()
         management.commit()

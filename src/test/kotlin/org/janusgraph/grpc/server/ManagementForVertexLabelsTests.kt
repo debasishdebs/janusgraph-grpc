@@ -427,7 +427,7 @@ class ManagementForVertexLabelsTests {
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
 
-        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)!!
+        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph, label, index)!!
 
         assertNotNull(compositeIndex.id)
         assertEquals("test", compositeIndex.name)
@@ -447,7 +447,7 @@ class ManagementForVertexLabelsTests {
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
 
-        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)!!
+        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph, label, index)!!
 
         assertNotNull(compositeIndex.id)
         assertEquals("test", compositeIndex.name)
@@ -456,6 +456,8 @@ class ManagementForVertexLabelsTests {
         assertEquals("propertyName", compositeIndex.propertiesList.first().name)
         assertEquals("INSTALLED", compositeIndex.status)
         assertEquals(label.name, compositeIndex.label)
+
+        println("Enabling index now")
 
         val compositeVertexIndex = managementServer.enableVertexCompositeIndex(graph, compositeIndex)
         assertEquals("ENABLED", compositeVertexIndex.status)
@@ -469,7 +471,7 @@ class ManagementForVertexLabelsTests {
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", unique = true, properties = listOf(label.propertiesList!!.first()))
 
-        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)!!
+        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph, label, index)!!
 
         assertTrue(compositeIndex.unique)
     }
@@ -484,7 +486,7 @@ class ManagementForVertexLabelsTests {
             buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(property1, property2))
 
-        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)!!
+        val compositeIndex = managementServer.ensureCompositeIndexByVertexLabel(graph, label, index)!!
 
         assertEquals(2, compositeIndex.propertiesCount)
         assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
@@ -579,7 +581,7 @@ class ManagementForVertexLabelsTests {
         val property = buildProperty(dataType = PropertyDataType.String)
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
-        managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)
+        managementServer.ensureCompositeIndexByVertexLabel(graph, label, index)
 
         val compositeIndex = managementServer.getCompositeIndicesByVertexLabel(graph, label).first()
 
@@ -600,7 +602,7 @@ class ManagementForVertexLabelsTests {
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", unique = true, properties = listOf(label.propertiesList!!.first()))
 
-        managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)
+        managementServer.ensureCompositeIndexByVertexLabel(graph, label, index)
 
         val compositeIndex = managementServer.getCompositeIndicesByVertexLabel(graph, label).first()
 
@@ -616,7 +618,7 @@ class ManagementForVertexLabelsTests {
         val label =
             buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(property1, property2))
-        managementServer.ensureCompositeIndexByVertexLabel(graph.openManagement(), label, index)!!
+        managementServer.ensureCompositeIndexByVertexLabel(graph, label, index)!!
 
         val compositeIndex = managementServer.getCompositeIndicesByVertexLabel(graph, label).first()
 

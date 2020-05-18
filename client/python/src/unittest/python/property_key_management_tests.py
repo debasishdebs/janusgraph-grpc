@@ -3,7 +3,7 @@ from janusgraph.management.janusgraph_management import JanusGraphManagement
 from janusgraph.management.element.property_key import PropertyKey
 
 
-class MyTestCase(unittest.TestCase):
+class PropertyKeyManagementTests(unittest.TestCase):
     def setUp(self):
         self.HOST = "localhost"
         self.PORT = 10182

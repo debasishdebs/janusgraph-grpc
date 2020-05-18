@@ -96,10 +96,21 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
     }
 
     override fun ensureCompositeIndexByEdgeLabel(
-        management: JanusGraphManagement,
+        graph: StandardJanusGraph,
         requestLabel: EdgeLabel,
         requestIndex: CompositeEdgeIndex
     ): CompositeEdgeIndex? {
+
+        graph.tx().rollback()
+
+        val management = graph.openManagement()
+
+        if (management.openInstances.size > 1) {
+            management.commit()
+            throw IllegalAccessException("There are multiple open management instances. " +
+                "Please close the stale transactions")
+        }
+
         val label = getEdgeLabel(management, requestLabel) ?: throw NullPointerException("edge should exists")
 
         val keys = requestIndex.propertiesList.map { management.getPropertyKey(it.name) }
@@ -210,10 +221,25 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
         val indexName = index.name
         val labelConstraint = index.label
 
-        ManagementSystem.awaitGraphIndexStatus(graph, indexName).call()
+//        graph.tx().rollback()
+//
+//        val mgmt = graph.openManagement()
+//        if (mgmt.openInstances.size > 1) {
+//            mgmt.commit()
+//            throw IllegalAccessException("There are multiple open management instances. " +
+//                "Please close the stale transactions")
+//        }
+
+        println("Awaiting to enable Edge index now")
+
+        ManagementSystem.awaitGraphIndexStatus(graph, indexName).timeout(1,
+            java.time.temporal.ChronoUnit.MINUTES).status(SchemaStatus.REGISTERED, SchemaStatus.ENABLED).call()
 
         val management = graph.openManagement()
         val idx = management.getGraphIndex(indexName)
+
+        println("Status of index" + idx.getIndexStatus(idx.fieldKeys[0]) + " for index " + idx.name())
+
         if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.REGISTERED) {
             management.updateIndex(idx, SchemaAction.ENABLE_INDEX)
         } else if (idx.getIndexStatus(idx.fieldKeys[0]) == SchemaStatus.INSTALLED)
@@ -223,7 +249,6 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
 
         val compositeIndex = CompositeEdgeIndex.newBuilder()
             .setName(idx.name())
-            .setUnique(idx.isUnique)
             .addAllProperties(idx.fieldKeys.map { createEdgePropertyProto(it) })
             .setStatus(convertSchemaStatusToString(idx.getIndexStatus(idx.fieldKeys[0])))
             .setLabel(labelConstraint)
@@ -234,9 +259,19 @@ class ManagementForEdgeLabels : IManagementForEdgeLabels {
     }
 
     override fun ensureCompositeIndexForEdge(
-        management: JanusGraphManagement,
+        graph: StandardJanusGraph,
         requestIndex: CompositeEdgeIndex
     ): CompositeEdgeIndex? {
+
+        graph.tx().rollback()
+
+        val management = graph.openManagement()
+
+        if (management.openInstances.size > 1) {
+            management.commit()
+            throw IllegalAccessException("There are multiple open management instances. " +
+                "Please close the stale transactions")
+        }
 
         val keys = requestIndex.propertiesList.map { management.getPropertyKey(it.name) }
         val builder = management.buildIndex(requestIndex.name, Edge::class.java)

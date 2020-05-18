@@ -325,7 +325,7 @@ class ManagementForEdgeLabelsTests {
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
 
-        val compositeIndex = managementServer.ensureCompositeIndexByEdgeLabel(graph.openManagement(), label, index)!!
+        val compositeIndex = managementServer.ensureCompositeIndexByEdgeLabel(graph, label, index)!!
 
         assertNotNull(compositeIndex.id)
         assertEquals("test", compositeIndex.name)
@@ -344,7 +344,7 @@ class ManagementForEdgeLabelsTests {
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
 
-        val compositeIndex = managementServer.ensureCompositeIndexByEdgeLabel(graph.openManagement(), label, index)!!
+        val compositeIndex = managementServer.ensureCompositeIndexByEdgeLabel(graph, label, index)!!
 
         assertNotNull(compositeIndex.id)
         assertEquals("test", compositeIndex.name)
@@ -369,7 +369,7 @@ class ManagementForEdgeLabelsTests {
             buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(property1, property2))
 
-        val compositeIndex = managementServer.ensureCompositeIndexByEdgeLabel(graph.openManagement(), label, index)!!
+        val compositeIndex = managementServer.ensureCompositeIndexByEdgeLabel(graph, label, index)!!
 
         assertEquals(2, compositeIndex.propertiesCount)
         assertTrue(compositeIndex.propertiesList.any { it.name == property1.name })
@@ -393,7 +393,7 @@ class ManagementForEdgeLabelsTests {
         val property = buildProperty(dataType = PropertyDataType.String)
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
-        managementServer.ensureCompositeIndexByEdgeLabel(graph.openManagement(), label, index)
+        managementServer.ensureCompositeIndexByEdgeLabel(graph, label, index)
 
         val compositeIndex = managementServer.getCompositeIndicesByEdgeLabel(graph, label).first()
 
@@ -415,7 +415,7 @@ class ManagementForEdgeLabelsTests {
         val label =
             buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(property1, property2))
-        managementServer.ensureCompositeIndexByEdgeLabel(graph.openManagement(), label, index)!!
+        managementServer.ensureCompositeIndexByEdgeLabel(graph, label, index)!!
 
         val compositeIndex = managementServer.getCompositeIndicesByEdgeLabel(graph, label).first()
 
@@ -430,7 +430,7 @@ class ManagementForEdgeLabelsTests {
         val property = buildProperty(dataType = PropertyDataType.String)
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
-        managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)
+        managementServer.ensureCompositeIndexForEdge(graph, index)
 
         val compositeIndex = managementServer.getEdgeCompositeIndexByName(graph, "test")
 
@@ -453,7 +453,7 @@ class ManagementForEdgeLabelsTests {
         buildLabel(properties = listOf(property1, property2, property3), managementServer = managementServer, graph = graph)
 
         val index = buildCompositeIndex("test", properties = listOf(property1, property2, property3))
-        managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)!!
+        managementServer.ensureCompositeIndexForEdge(graph, index)!!
 
         val compositeIndex = managementServer.getEdgeCompositeIndexByName(graph, "test")
 
@@ -470,7 +470,7 @@ class ManagementForEdgeLabelsTests {
         val property = buildProperty(dataType = PropertyDataType.String)
         val label = buildLabel(properties = listOf(property), managementServer = managementServer, graph = graph)
         val index = buildCompositeIndex("test", properties = listOf(label.propertiesList!!.first()))
-        managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)
+        managementServer.ensureCompositeIndexForEdge(graph, index)
 
         val compositeIndices = managementServer.getCompositeIndicesForEdge(graph)
 
@@ -497,7 +497,7 @@ class ManagementForEdgeLabelsTests {
 
         val index = buildCompositeIndex("test", properties = listOf(property1, property2, property3))
         println(index)
-        managementServer.ensureCompositeIndexForEdge(graph.openManagement(), index)!!
+        managementServer.ensureCompositeIndexForEdge(graph, index)!!
 
         val compositeIndices = managementServer.getCompositeIndicesForEdge(graph)
 

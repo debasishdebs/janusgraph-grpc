@@ -3,13 +3,15 @@ import time
 from janusgraph.management.janusgraph_management import JanusGraphManagement
 
 
-class MyTestCase(unittest.TestCase):
+class CompositeIndexManagementTests(unittest.TestCase):
     def setUp(self):
         self.HOST = "localhost"
         self.PORT = 10182
         self.GRAPH = "graph_inmemory"
 
         self.mgmt = JanusGraphManagement().connect(self.HOST, self.PORT, self.GRAPH)
+
+        time.sleep(10)
 
     def test_create_basic_vertex_composite_index(self):
         index_name = "index1"
